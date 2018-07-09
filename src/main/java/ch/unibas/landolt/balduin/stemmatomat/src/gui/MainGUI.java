@@ -8,6 +8,9 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
 import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
@@ -21,14 +24,24 @@ import ch.unibas.landolt.balduin.stemmatomat.src.util.Loggable;
 public class MainGUI extends JFrame implements WindowListener, Loggable {
 	
 	private StemmatomatMain parent;
+	private Actions actions;
 	
+	// Components
 	private JTabbedPane tabs;
 	private JTextArea logTextArea;
+	private JPanel workspace;
+	
+	// Menu
+	private JMenuBar menuBar;
+	private JMenu m_file;
+	private JMenuItem mi_importText;
+	private JMenu m_edit;
 
 	public MainGUI(StemmatomatMain parent){
-		super("Stemmat-o-Mat!");
+		super("Stemmat-o-mat!");
 		
 		this.parent = parent;
+		actions = new Actions();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addWindowListener(this);
 		setExtendedState(MAXIMIZED_BOTH);
@@ -43,6 +56,27 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 
+	private void setUpMenu() {
+		menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		m_file = new JMenu("File");
+		menuBar.add(m_file);
+		
+		mi_importText = new JMenuItem("Import Text");
+		mi_importText.addActionListener(e -> actions.importText());
+		m_file.add(mi_importText);
+		
+		m_edit = new JMenu("Edit");
+		menuBar.add(m_edit);
+		
+		// TODO add actual content
+		
+	}
+
+
+
+
 	private void setUpGUI() {
 		JPanel p = new JPanel(new BorderLayout());
 		setContentPane(p);
@@ -51,18 +85,17 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		
 		tabs = new JTabbedPane();
 		p.add(tabs);
+		
+		workspace = new JPanel(new BorderLayout());
+		JScrollPane sp = new JScrollPane(workspace);
+		tabs.addTab("Wokrspace", null, sp, "Everything of importance happens here.");
+		
 		logTextArea = new JTextArea();
 		logTextArea.setEditable(false);
-		JScrollPane sp = new JScrollPane(logTextArea);
+		sp = new JScrollPane(logTextArea);
 		tabs.addTab("Log", null, sp, "You can ignore me. Or show me to Balduin, if there's a problem.");
-	}
-
-
-
-
-	private void setUpMenu() {
-		// TODO Auto-generated method stub
 		
+		//TODO more content
 	}
 
 
@@ -81,6 +114,14 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		Log.log("GUI shown.");
 	}
 
+	public void openImportDialog() {
+		// TODO Auto-generated method stub
+		Log.log("Opening Import Dialog.");
+		ImportDialog dialog = new ImportDialog(this);
+		dialog.setLocation(300, 200);
+		dialog.setVisible(true);
+	}
+
 	
 
 	public void windowClosing(WindowEvent arg0) {
@@ -94,5 +135,15 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	public void windowIconified(WindowEvent arg0) {}
 	public void windowOpened(WindowEvent arg0) {}
 	public void windowClosed(WindowEvent arg0) {}
+	
+	private class Actions{
+
+		public void importText() {
+			Log.log("Action called: import text");
+			openImportDialog();
+			// TODO Auto-generated method stub
+		}
+		
+	}
 
 }
