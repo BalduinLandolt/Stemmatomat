@@ -12,6 +12,7 @@ import javax.swing.JDialog;
 import javax.swing.JPanel;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
 
 @SuppressWarnings("serial")
 public class ImportDialog extends JDialog {
@@ -46,14 +47,34 @@ public class ImportDialog extends JDialog {
 		outer.add(buttonsPanel);
 
 		JButton btnCancel = new JButton("Cancel");
+		btnCancel.addActionListener(e -> actionCancel());
 		buttonsPanel.add(btnCancel);
-		JButton btnOK = new JButton(" OK ");
+		
+		JButton btnOK = new JButton("  OK  ");
+		btnOK.addActionListener(e -> actionOK());
 		buttonsPanel.add(btnOK);
+		
 		JButton btnOKPlusAnother = new JButton("OK, import another");
+		btnOKPlusAnother.addActionListener(e -> actionOKPlusAnother());
 		buttonsPanel.add(btnOKPlusAnother);
 		
 		// TODO Auto-generated method stub
 		
+	}
+
+	private void actionOKPlusAnother() {
+		Log.log("Import Dialog: OK, and open another import.");
+		// TODO Auto-generated method stub
+	}
+
+	private void actionOK() {
+		Log.log("Import Dialog: OK");
+		// TODO Auto-generated method stub
+	}
+
+	private void actionCancel() {
+		Log.log("Import Dialog: Canceled");
+		dispose();
 	}
 
 
