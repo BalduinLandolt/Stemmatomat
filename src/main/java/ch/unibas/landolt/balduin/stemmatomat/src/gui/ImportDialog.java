@@ -58,7 +58,7 @@ public class ImportDialog extends JDialog {
 		btnOKPlusAnother.addActionListener(e -> actionOKPlusAnother());
 		buttonsPanel.add(btnOKPlusAnother);
 		
-		// TODO Auto-generated method stub
+		// TODO more
 		
 	}
 
