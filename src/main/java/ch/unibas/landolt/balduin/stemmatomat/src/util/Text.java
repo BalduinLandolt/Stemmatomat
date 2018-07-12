@@ -1,5 +1,6 @@
 package ch.unibas.landolt.balduin.stemmatomat.src.util;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Vector;
 
@@ -40,8 +41,8 @@ public class Text {
 		this.textContent = textContent;
 	}
 
-	public Vector<String> getList() {
-		Vector<String> v = new Vector<String>();
+	public ArrayList<String> getList() {
+		ArrayList<String> v = new ArrayList<String>();
 		v.add(shelfmark);
 		v.add(identifier);
 		String[] ss = textContent.split("£");

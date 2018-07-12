@@ -5,6 +5,8 @@ import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
@@ -26,6 +29,7 @@ import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Loggable;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Settings;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Text;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.TextDisplayTableModel;
 
 @SuppressWarnings("serial")
 public class MainGUI extends JFrame implements WindowListener, Loggable {
@@ -45,6 +49,8 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	private JMenu m_edit;
 	private JMenu m_settings;
 	private JCheckBoxMenuItem cmi_autoOpenLog;
+	
+	private JPopupMenu popup;
 
 	public MainGUI(StemmatomatMain parent){
 		super("Stemmat-o-mat!");
@@ -99,6 +105,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		setContentPane(p);
 		
 		setUpMenu();
+		createPopUp();
 		
 		tabs = new JTabbedPane();
 		p.add(tabs);
@@ -113,6 +120,15 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		tabs.addTab("Log", null, sp, "You can ignore me. Or show me to Balduin, if there's a problem.");
 		
 		//TODO more content
+	}
+
+
+
+
+	private void createPopUp() {
+		popup = new JPopupMenu();
+		JMenuItem test = new JMenuItem("Test");
+		popup.add(test);
 	}
 
 
@@ -161,34 +177,15 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		if (texts == null || texts.isEmpty())
 			return;
 		
+		TextDisplayTableModel model = new TextDisplayTableModel(texts);
+		
 		Log.log("Displaying Texts.");
 		
-		Vector<String> head = new Vector<String>();
-		Vector<Vector<String>> data = new Vector<Vector<String>>();
-		
-		int length = 0;
-		
-		for (Text t: texts) {
-			Vector<String> tmp = new Vector<String>();
-			tmp.addAll(t.getList());
-			data.add(tmp);
-			length = Math.max(length, tmp.size());
-		}
-		
-		for (int i = 0; i<length; i++) {
-			if (i==0)
-				head.add("Shelf Mark");
-			else if (i==1)
-				head.add("ID");
-			else
-				head.add("#"+(i-1));
-		}
-		
-		JTable table = new JTable(data, head);
+		JTable table = new JTable(model);
+		table.addMouseListener(new PopUpListener());
 		JScrollPane sp = new JScrollPane(table);
 		workspace.add(sp, BorderLayout.CENTER);
 	}
-
 	
 
 	public void windowClosing(WindowEvent arg0) {
@@ -210,6 +207,24 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 			openImportDialog();
 		}
 		
+	}
+	
+	private class PopUpListener extends MouseAdapter{
+
+	    public void mousePressed(MouseEvent e) {
+	        maybeShowPopup(e);
+	    }
+
+	    public void mouseReleased(MouseEvent e) {
+	        maybeShowPopup(e);
+	    }
+
+	    private void maybeShowPopup(MouseEvent e) {
+	        if (e.isPopupTrigger()) {
+	            popup.show(e.getComponent(),
+	                       e.getX(), e.getY());
+	        }
+	    }
 	}
 
 }
