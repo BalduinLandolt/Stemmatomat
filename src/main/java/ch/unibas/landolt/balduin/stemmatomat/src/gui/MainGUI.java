@@ -7,6 +7,8 @@ import java.awt.HeadlessException;
 import java.awt.event.ItemEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.ArrayList;
+import java.util.Vector;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
@@ -16,12 +18,14 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JTable;
 import javax.swing.JTextArea;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Loggable;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Settings;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.Text;
 
 @SuppressWarnings("serial")
 public class MainGUI extends JFrame implements WindowListener, Loggable {
@@ -137,11 +141,52 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 	public void openImportDialog() {
-		// TODO Auto-generated method stub
 		Log.log("Opening Import Dialog.");
 		ImportDialog dialog = new ImportDialog(this);
 		dialog.setLocation(300, 200);
 		dialog.setVisible(true);
+	}
+
+	public void importIsDone(ImportDialog caller, boolean openAnother) {
+		parent.importIsDone(caller);
+		
+		if (openAnother)
+			openImportDialog();
+	}
+
+
+
+
+	public void displayTexts(ArrayList<Text> texts) {
+		if (texts == null || texts.isEmpty())
+			return;
+		
+		Log.log("Displaying Texts.");
+		
+		Vector<String> head = new Vector<String>();
+		Vector<Vector<String>> data = new Vector<Vector<String>>();
+		
+		int length = 0;
+		
+		for (Text t: texts) {
+			Vector<String> tmp = new Vector<String>();
+			tmp.addAll(t.getList());
+			data.add(tmp);
+			length = Math.max(length, tmp.size());
+		}
+		
+		for (int i = 0; i<length; i++) {
+			if (i==0)
+				head.add("Shelf Mark");
+			else if (i==1)
+				head.add("ID");
+			else
+				head.add("#"+(i-1));
+		}
+		
+		JTable table = new JTable(data, head);
+		JScrollPane sp = new JScrollPane(table);
+		workspace.add(sp, BorderLayout.CENTER);
 	}
 
 	
@@ -163,7 +208,6 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		public void importText() {
 			Log.log("Action called: import text");
 			openImportDialog();
-			// TODO Auto-generated method stub
 		}
 		
 	}

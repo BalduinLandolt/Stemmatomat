@@ -64,12 +64,12 @@ public class ImportDialog extends JDialog {
 
 	private void actionOKPlusAnother() {
 		Log.log("Import Dialog: OK, and open another import.");
-		// TODO Auto-generated method stub
+		parent.importIsDone(this, true);
 	}
 
 	private void actionOK() {
 		Log.log("Import Dialog: OK");
-		// TODO Auto-generated method stub
+		parent.importIsDone(this, false);
 	}
 
 	private void actionCancel() {

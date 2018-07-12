@@ -1,16 +1,21 @@
 package ch.unibas.landolt.balduin.stemmatomat.src.mainApplication;
 
+import java.util.ArrayList;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
+import ch.unibas.landolt.balduin.stemmatomat.src.gui.ImportDialog;
 import ch.unibas.landolt.balduin.stemmatomat.src.gui.MainGUI;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Settings;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.Text;
 
 public class StemmatomatMain {
 	
 	private MainGUI mainGUI;
 	private Preferences userPreferences;
+	
+	private ArrayList<Text> texts = new ArrayList<Text>();
 
 	public StemmatomatMain() {
 		super();
@@ -22,9 +27,6 @@ public class StemmatomatMain {
 		
 		generatePreferences();
 		
-		//TODO other initialisations?
-		
-		//TODO create GUI
 		mainGUI = new MainGUI(this);
 	}
 
@@ -52,12 +54,33 @@ public class StemmatomatMain {
 	}
 
 	private void savePreferences() {
-		// TODO Auto-generated method stub
-		
-
-		//updateSettings();
 		Settings.savePreferences(userPreferences);
+	}
+	
+	public void importIsDone(ImportDialog caller) {
+
+		// TODO get Information from caller
 		
+		Log.log("Importing not yet implemented. Do fake-import instead.");
+		fakeImport();
+		
+		caller.dispose();
+		mainGUI.displayTexts(texts);
+	}
+
+
+
+
+	private void fakeImport() {
+		// TODO remove me as soon as possible 
+		Log.log("faking an import...");
+
+		Text text1 = new Text("aaaa", "Manuscript no 1", "Es war ein mal £ vor langer, langer Zeit £ irgend etwas.");
+		texts.add(text1);
+		Text text2 = new Text("aaaa", "Manuscript no 1", "Es war ein mal £ vor langer, langer Zeit £ irgend eine Sache.");
+		texts.add(text2);
+		
+		//
 	}
 	
 }
