@@ -44,12 +44,11 @@ public class StemmatomatMain {
 	}
 
 	public void terminate() {
-		// TODO Auto-generated method stub
-		
 		savePreferences();
 		
 		Log.terminate();
-		System.exit(0);
+		System.out.println("Consloe only: Log is shut down.");
+		//System.exit(0);
 	}
 
 	private void savePreferences() {

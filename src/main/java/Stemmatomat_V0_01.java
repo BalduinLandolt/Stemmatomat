@@ -14,7 +14,7 @@ public class Stemmatomat_V0_01 {
      * @param args ignored
      */
     public static void main(String[] args){
-        System.out.println("Program Launched.");
+        System.out.println("Console Only: Program Launched.");
 
         StemmatomatMain app = new StemmatomatMain();
         app.run();
