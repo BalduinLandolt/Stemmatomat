@@ -4,9 +4,11 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
+import java.awt.event.ItemEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 
+import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -19,6 +21,7 @@ import javax.swing.JTextArea;
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Loggable;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.Settings;
 
 @SuppressWarnings("serial")
 public class MainGUI extends JFrame implements WindowListener, Loggable {
@@ -36,6 +39,8 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	private JMenu m_file;
 	private JMenuItem mi_importText;
 	private JMenu m_edit;
+	private JMenu m_settings;
+	private JCheckBoxMenuItem cmi_autoOpenLog;
 
 	public MainGUI(StemmatomatMain parent){
 		super("Stemmat-o-mat!");
@@ -69,6 +74,14 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		
 		m_edit = new JMenu("Edit");
 		menuBar.add(m_edit);
+		
+		m_settings = new JMenu("Settings");
+		menuBar.add(m_settings);
+		
+		cmi_autoOpenLog = new JCheckBoxMenuItem("Auto Open Log File on Close");
+		cmi_autoOpenLog.setSelected(Settings.openLogOnClose());
+		cmi_autoOpenLog.addItemListener(e -> Settings.setOpenLogOnClose(cmi_autoOpenLog.isSelected()));
+		m_settings.add(cmi_autoOpenLog);
 		
 		// TODO add actual content
 		
@@ -110,9 +123,18 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 	public void launch() {
+		refreshSettings();
 		setVisible(true);
 		Log.log("GUI shown.");
 	}
+
+	private void refreshSettings() {
+		Log.log("Refreshing GUI settings");
+		cmi_autoOpenLog.setSelected(Settings.openLogOnClose());
+	}
+
+
+
 
 	public void openImportDialog() {
 		// TODO Auto-generated method stub

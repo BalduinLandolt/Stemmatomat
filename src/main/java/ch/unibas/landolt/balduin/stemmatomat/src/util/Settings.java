@@ -65,4 +65,9 @@ public class Settings {
 		
 		Log.log("Settings saved: "+length);
 	}
+
+	public static void setOpenLogOnClose(boolean selected) {
+		openLogOnClose = selected;
+		Log.log("Set openLogOnClose to '"+openLogOnClose+"'.");
+	}
 }
