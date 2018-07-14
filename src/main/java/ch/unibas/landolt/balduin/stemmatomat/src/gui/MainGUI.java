@@ -98,6 +98,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		
 		// TODO add actual content
 		
+		// TODO option to remove text/texts
 	}
 
 
