@@ -43,6 +43,7 @@ public class StemmatomatMain {
 	public void run() {
 		Settings.getSettings(userPreferences);
 		mainGUI.launch();
+		fakeImport();
 	}
 
 	public void terminate() {
@@ -61,8 +62,6 @@ public class StemmatomatMain {
 
 		// TODO get Information from caller
 		
-		Log.log("Importing not yet implemented. Do fake-import instead.");
-		fakeImport();
 		
 		caller.dispose();
 		mainGUI.displayTexts(texts);
@@ -77,10 +76,13 @@ public class StemmatomatMain {
 
 		Text text1 = new Text("aaaa", "Manuscript no 1", "Es war ein mal £ vor langer, langer Zeit £ irgend etwas.");
 		texts.add(text1);
-		Text text2 = new Text("aaaa", "Manuscript no 1", "Es war ein mal £ vor langer, langer Zeit £ irgend eine Sache.");
+		Text text2 = new Text("bbbb", "Manuscript no 2", "Es war ein mal £ vor langer, langer Zeit £ irgend eine Sache.");
 		texts.add(text2);
 		
 		//
+		
+
+		mainGUI.displayTexts(texts);
 	}
 	
 }

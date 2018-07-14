@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
+import java.awt.Point;
 import java.awt.event.ItemEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -23,6 +24,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
@@ -41,6 +43,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	private JTabbedPane tabs;
 	private JTextArea logTextArea;
 	private JPanel workspace;
+	private JTable textTable;
 	
 	// Menu
 	private JMenuBar menuBar;
@@ -144,6 +147,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 	public void launch() {
 		refreshSettings();
+		displayTexts(null);
 		setVisible(true);
 		Log.log("GUI shown.");
 	}
@@ -174,16 +178,20 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 	public void displayTexts(ArrayList<Text> texts) {
-		if (texts == null || texts.isEmpty())
+		workspace.removeAll();
+		
+		if (texts == null || texts.isEmpty()) {
+			workspace.add(new JTextField("No Texts loaded. Hit 'File > Import Text'."), BorderLayout.NORTH);
 			return;
+		}
 		
 		TextDisplayTableModel model = new TextDisplayTableModel(texts);
 		
 		Log.log("Displaying Texts.");
 		
-		JTable table = new JTable(model);
-		table.addMouseListener(new PopUpListener());
-		JScrollPane sp = new JScrollPane(table);
+		textTable = new JTable(model);
+		textTable.addMouseListener(new PopUpListener());
+		JScrollPane sp = new JScrollPane(textTable);
 		workspace.add(sp, BorderLayout.CENTER);
 	}
 	
@@ -210,21 +218,37 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	}
 	
 	private class PopUpListener extends MouseAdapter{
-
-	    public void mousePressed(MouseEvent e) {
-	        maybeShowPopup(e);
-	    }
-
-	    public void mouseReleased(MouseEvent e) {
-	        maybeShowPopup(e);
-	    }
-
-	    private void maybeShowPopup(MouseEvent e) {
-	        if (e.isPopupTrigger()) {
-	            popup.show(e.getComponent(),
-	                       e.getX(), e.getY());
-	        }
-	    }
+		
+		public void mouseClicked(MouseEvent e) {
+			Log.log("Mouse clicked on Table. Showing popup.");
+            popup.show(e.getComponent(), e.getX(), e.getY());
+            Log.log(e.getComponent());
+            Log.log(e.getPoint());
+            Point p = e.getPoint();
+            String s = textTable.getModel().getValueAt(textTable.rowAtPoint(p), textTable.columnAtPoint(p)).toString();
+            Log.log(s);
+		}
+	    
+	    
+// would be applicable, if popup should only show on right click.
+//		public void mousePressed(MouseEvent e) {
+//	        maybeShowPopup(e);
+//	    }
+//
+//	    public void mouseReleased(MouseEvent e) {
+//	        maybeShowPopup(e);
+//	    }
+//
+//	    private void maybeShowPopup(MouseEvent e) {
+//	        if (e.isPopupTrigger()) {
+//	            popup.show(e.getComponent(), e.getX(), e.getY());
+//	            Log.log(e.getComponent());
+//	            Log.log(e.getPoint());
+//	            Point p = e.getPoint();
+//	            String s = textTable.getModel().getValueAt(textTable.rowAtPoint(p), textTable.columnAtPoint(p)).toString();
+//	            Log.log(s);
+//	        }
+//	    }
 	}
 
 }
