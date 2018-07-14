@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Window;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -33,12 +34,7 @@ public class ImportDialog extends JDialog {
 
 	public ImportDialog(MainGUI p) {
 		super(p, "Import Text", true);
-		
-		
 		setUpComponents();
-		setMinimumSize(new Dimension(600, 400));
-		pack();
-		
 		parent = p;
 	}
 
@@ -107,6 +103,7 @@ public class ImportDialog extends JDialog {
 		footer.add(Box.createHorizontalGlue());
 
 		btn_cancel = new JButton("Cancel");
+		btn_cancel.addActionListener(e -> actionCancel());
 		footer.add(btn_cancel);
 		
 		footer.add(Box.createRigidArea(new Dimension(5, 5)));
@@ -133,6 +130,87 @@ public class ImportDialog extends JDialog {
 	private void actionCancel() {
 		Log.log("Import Dialog: Canceled");
 		dispose();
+	}
+
+	public void run() {
+		setMinimumSize(new Dimension(600, 400));
+		pack();
+		setLocation(300, 200);
+		switchToFileSelectionView();
+		setVisible(true);
+	}
+
+	private void switchToFileSelectionView() {
+		setTitle("Import Text - Load from File");
+
+		btn_back.setEnabled(false);
+		btn_forward.setEnabled(true);
+		btn_ok.setEnabled(false);
+		btn_okAndAnother.setEnabled(false);
+		
+		removeActionListeners(btn_forward);
+		btn_forward.addActionListener(e -> switchToXMLView());
+		
+		
+		
+		// TODO set contents
+		
+	}
+
+	private void switchToXMLView() {
+		setTitle("Import Text - Select from XML");
+
+		btn_back.setEnabled(true);
+		btn_forward.setEnabled(true);
+		btn_ok.setEnabled(false);
+		btn_okAndAnother.setEnabled(false);
+		
+		removeActionListeners(btn_back);
+		btn_back.addActionListener(e -> switchToFileSelectionView());
+		removeActionListeners(btn_forward);
+		btn_forward.addActionListener(e -> switchToTextEditView());
+		
+		
+		// TODO set contents
+	}
+
+	private void switchToTextEditView() {
+		setTitle("Import Text - Edit Text");
+
+		btn_back.setEnabled(true);
+		btn_forward.setEnabled(true);
+		btn_ok.setEnabled(false);
+		btn_okAndAnother.setEnabled(false);
+		
+		removeActionListeners(btn_back);
+		btn_back.addActionListener(e -> switchToXMLView());
+		removeActionListeners(btn_forward);
+		btn_forward.addActionListener(e -> switchToPreviewView());
+		
+		
+		// TODO set contents
+	}
+
+	private void switchToPreviewView() {
+		setTitle("Import Text - Preview Import");
+
+		btn_back.setEnabled(true);
+		btn_forward.setEnabled(false);
+		btn_ok.setEnabled(true);
+		btn_okAndAnother.setEnabled(true);
+		
+		removeActionListeners(btn_back);
+		btn_back.addActionListener(e -> switchToTextEditView());
+		
+		
+		// TODO set contents
+	}
+
+	private void removeActionListeners(JButton btn) {
+		ActionListener[] aa = btn.getActionListeners();
+		for (ActionListener a: aa) {
+			btn.removeActionListener(a);
+		}
 	}
 
 

@@ -164,8 +164,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	public void openImportDialog() {
 		Log.log("Opening Import Dialog.");
 		ImportDialog dialog = new ImportDialog(this);
-		dialog.setLocation(300, 200);
-		dialog.setVisible(true);
+		dialog.run();
 	}
 
 	public void importIsDone(ImportDialog caller, boolean openAnother) {
