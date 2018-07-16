@@ -251,4 +251,8 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 //	    }
 	}
 
+	public ArrayList<Text> getTexts() {
+		return parent.getTexts();
+	}
+
 }

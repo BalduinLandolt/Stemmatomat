@@ -7,6 +7,7 @@ import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Window;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -134,17 +135,15 @@ public class ImportDialog extends JDialog {
 		somethingChanged = false;
 
 		btn_back.setEnabled(false);
-		btn_forward.setEnabled(true);
+		btn_forward.setEnabled(!forward);
 		btn_ok.setEnabled(false);
 		btn_okAndAnother.setEnabled(false);
 
 		removeActionListeners(btn_forward);
 		btn_forward.addActionListener(e -> switchToXMLView(true));
 		
-		view_fs = new FileSelectionView(text);
+		view_fs = new FileSelectionView(this);
 		contents.add(view_fs, BorderLayout.CENTER);
-
-		// TODO set contents
 
 		Log.log("Switched to File Selection View.");
 	}
@@ -276,6 +275,44 @@ public class ImportDialog extends JDialog {
 		for (ActionListener a: aa) {
 			btn.removeActionListener(a);
 		}
+	}
+
+	public Text getText() {
+		return text;
+	}
+
+	public void checkFileLoaded(FileSelectionView caller) {
+		if (!caller.hasFile()) {
+			caller.responde("No file selected.");
+			btn_forward.setEnabled(false);
+			return;
+		}
+		if (!caller.hasID()) {
+			caller.responde("No ID given - this field is mandatory.");
+			btn_forward.setEnabled(false);
+			return;
+		}
+		String id = caller.getID();
+		if (! uniqueID(id)) {
+			caller.responde("There already is a text with this ID - ID must be unique.");
+			btn_forward.setEnabled(false);
+			return;
+		}
+		
+		// everything ok!
+		btn_forward.setEnabled(true);
+		caller.responde("Everything OK");
+	}
+
+	private boolean uniqueID(String id) {
+		ArrayList<Text> texts = parent.getTexts();
+		
+		for (Text t: texts) {
+			if (t.getIdentifier().equals(id))
+				return false;
+		}
+		
+		return true;
 	}
 
 

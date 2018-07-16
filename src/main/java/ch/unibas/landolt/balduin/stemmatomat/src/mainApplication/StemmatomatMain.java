@@ -84,5 +84,9 @@ public class StemmatomatMain {
 
 		mainGUI.displayTexts(texts);
 	}
+
+	public ArrayList<Text> getTexts() {
+		return texts;
+	}
 	
 }
