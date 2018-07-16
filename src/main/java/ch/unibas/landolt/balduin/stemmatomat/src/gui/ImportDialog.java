@@ -18,11 +18,14 @@ import javax.swing.JPanel;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.Text;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.guiUtils.FileSelectionView;
 
 @SuppressWarnings("serial")
 public class ImportDialog extends JDialog {
 
 	private MainGUI parent;
+	private Text text;
 
 	private JPanel contents;
 	private JPanel footer;
@@ -32,6 +35,8 @@ public class ImportDialog extends JDialog {
 	private JButton btn_cancel;
 	private JButton btn_ok;
 	private JButton btn_okAndAnother;
+	
+	private FileSelectionView view_fs;
 
 	private boolean somethingChanged = false;
 
@@ -135,8 +140,9 @@ public class ImportDialog extends JDialog {
 
 		removeActionListeners(btn_forward);
 		btn_forward.addActionListener(e -> switchToXMLView(true));
-
-
+		
+		view_fs = new FileSelectionView(text);
+		contents.add(view_fs, BorderLayout.CENTER);
 
 		// TODO set contents
 
