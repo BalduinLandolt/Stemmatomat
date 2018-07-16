@@ -49,37 +49,6 @@ public class ImportDialog extends JDialog {
 		createContents(outest);
 
 		createFooter(outest);
-
-
-		//		JPanel outer = new JPanel();
-		//		outer.setLayout(new BoxLayout(outer, BoxLayout.Y_AXIS));
-		//		getContentPane().add(outer);
-		//		
-		//		JPanel filePanel = new JPanel();
-		//		filePanel.setBorder(BorderFactory.createTitledBorder("Input File: "));
-		//		outer.add(filePanel);
-		//		
-		//		JPanel optionPanel = new JPanel();
-		//		optionPanel.setBorder(BorderFactory.createTitledBorder("Options: "));
-		//		outer.add(optionPanel);
-		//		
-		//		JPanel buttonsPanel = new JPanel();
-		//		outer.add(buttonsPanel);
-		//
-		//		JButton btnCancel = new JButton("Cancel");
-		//		btnCancel.addActionListener(e -> actionCancel());
-		//		buttonsPanel.add(btnCancel);
-		//		
-		//		JButton btnOK = new JButton("  OK  ");
-		//		btnOK.addActionListener(e -> actionOK());
-		//		buttonsPanel.add(btnOK);
-		//		
-		//		JButton btnOKPlusAnother = new JButton("OK, import another");
-		//		btnOKPlusAnother.addActionListener(e -> actionOKPlusAnother());
-		//		buttonsPanel.add(btnOKPlusAnother);
-
-		// TODO more
-
 	}
 
 	private void createContents(JPanel outest) {
@@ -112,11 +81,13 @@ public class ImportDialog extends JDialog {
 		footer.add(Box.createRigidArea(new Dimension(5, 5)));
 
 		btn_ok = new JButton(" OK ");
+		btn_ok.addActionListener(e -> actionOK());
 		footer.add(btn_ok);
 
 		footer.add(Box.createRigidArea(new Dimension(5, 5)));
 
 		btn_okAndAnother = new JButton("Ok, import another Text");
+		btn_okAndAnother.addActionListener(e -> actionOKPlusAnother());
 		footer.add(btn_okAndAnother);
 	}
 
