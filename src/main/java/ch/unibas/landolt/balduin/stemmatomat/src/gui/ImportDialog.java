@@ -142,6 +142,7 @@ public class ImportDialog extends JDialog {
 		removeActionListeners(btn_forward);
 		btn_forward.addActionListener(e -> switchToXMLView(true));
 		
+		contents.removeAll();
 		view_fs = new FileSelectionView(this);
 		contents.add(view_fs, BorderLayout.CENTER);
 
