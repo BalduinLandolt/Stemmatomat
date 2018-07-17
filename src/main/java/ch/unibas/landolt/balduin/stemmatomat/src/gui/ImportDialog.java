@@ -21,6 +21,7 @@ import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Text;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.guiUtils.FileSelectionView;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.guiUtils.XMLSelectionView;
 
 @SuppressWarnings("serial")
 public class ImportDialog extends JDialog {
@@ -38,6 +39,7 @@ public class ImportDialog extends JDialog {
 	private JButton btn_okAndAnother;
 	
 	private FileSelectionView view_fs;
+	private XMLSelectionView view_x;
 
 	private boolean somethingChanged = false;
 
@@ -113,7 +115,7 @@ public class ImportDialog extends JDialog {
 	}
 
 	public void run() {
-		setMinimumSize(new Dimension(600, 400));
+		setMinimumSize(new Dimension(800, 550));
 		pack();
 		setLocation(300, 200);
 		switchToFileSelectionView(true);
@@ -141,10 +143,16 @@ public class ImportDialog extends JDialog {
 
 		removeActionListeners(btn_forward);
 		btn_forward.addActionListener(e -> switchToXMLView(true));
-		
+
 		contents.removeAll();
-		view_fs = new FileSelectionView(this);
+		if (forward) {
+			view_fs = new FileSelectionView(this);
+		}
 		contents.add(view_fs, BorderLayout.CENTER);
+		
+		
+		revalidate();
+		repaint();
 
 		Log.log("Switched to File Selection View.");
 	}
@@ -174,9 +182,18 @@ public class ImportDialog extends JDialog {
 		btn_back.addActionListener(e -> switchToFileSelectionView(false));
 		removeActionListeners(btn_forward);
 		btn_forward.addActionListener(e -> switchToTextEditView(true));
+		
+		contents.removeAll();
+		if (forward)
+			view_x = new XMLSelectionView(this);
+		contents.add(view_x, BorderLayout.CENTER);
 
-
-		// TODO set contents
+		// TODO display xml tags as check boxes
+		// TODO display text according to selection
+		
+		revalidate();
+		repaint();
+		
 		Log.log("Switched to XML Selection View.");
 	}
 
@@ -205,9 +222,14 @@ public class ImportDialog extends JDialog {
 		btn_back.addActionListener(e -> switchToXMLView(false));
 		removeActionListeners(btn_forward);
 		btn_forward.addActionListener(e -> switchToPreviewView(true));
+		
+		contents.removeAll();
+		//view_fs = new FileSelectionView(this);
+		//contents.add(view_fs, BorderLayout.CENTER);
+		
+		revalidate();
+		repaint();
 
-
-		// TODO set contents
 		Log.log("Switched to Edit View.");
 	}
 
