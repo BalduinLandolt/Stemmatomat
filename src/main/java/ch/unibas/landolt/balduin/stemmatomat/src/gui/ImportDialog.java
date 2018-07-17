@@ -21,6 +21,7 @@ import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Text;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.guiUtils.FileSelectionView;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.guiUtils.TextEditView;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.guiUtils.XMLSelectionView;
 
 @SuppressWarnings("serial")
@@ -40,6 +41,7 @@ public class ImportDialog extends JDialog {
 	
 	private FileSelectionView view_fs;
 	private XMLSelectionView view_x;
+	private TextEditView view_txt;
 
 	private boolean somethingChanged = false;
 
@@ -224,8 +226,10 @@ public class ImportDialog extends JDialog {
 		btn_forward.addActionListener(e -> switchToPreviewView(true));
 		
 		contents.removeAll();
-		//view_fs = new FileSelectionView(this);
-		//contents.add(view_fs, BorderLayout.CENTER);
+		if (forward)
+			view_txt = new TextEditView(this);
+		contents.add(view_txt, BorderLayout.CENTER);
+		//TODO display text
 		
 		revalidate();
 		repaint();
