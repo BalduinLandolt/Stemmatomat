@@ -7,6 +7,8 @@ import java.awt.Frame;
 import java.awt.GraphicsConfiguration;
 import java.awt.Window;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.BorderFactory;
@@ -16,6 +18,10 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
@@ -44,6 +50,8 @@ public class ImportDialog extends JDialog {
 	private TextEditView view_txt;
 
 	private boolean somethingChanged = false;
+	
+	private Document jdomDoc;
 
 	public ImportDialog(MainGUI p) {
 		super(p, "Import Text", true);
@@ -273,7 +281,7 @@ public class ImportDialog extends JDialog {
 		}
 
 		// TODO implement this
-		Log.log("should get text from edit now; not yet implemented!");
+		Log.log("should get text from text edit now; not yet implemented!");
 	}
 
 	private void getTextFromFileSelection() {
@@ -281,9 +289,12 @@ public class ImportDialog extends JDialog {
 			Log.log("No change has been made.");
 			return;
 		}
-
-		// TODO implement this
-		Log.log("should get text from file selection now; not yet implemented!");
+		jdomDoc = view_fs.getDoc();
+		
+		if (jdomDoc == null)
+			Log.log("No XML Document found.");
+		else
+			Log.log("Got an XML Document.");
 	}
 
 
@@ -340,6 +351,10 @@ public class ImportDialog extends JDialog {
 		}
 		
 		return true;
+	}
+
+	public void setChangesMade(boolean b) {
+		somethingChanged = b;
 	}
 
 

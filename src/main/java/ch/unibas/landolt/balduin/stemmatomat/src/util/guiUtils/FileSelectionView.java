@@ -3,6 +3,7 @@ package ch.unibas.landolt.balduin.stemmatomat.src.util.guiUtils;
 import java.awt.BorderLayout;
 import java.awt.GridLayout;
 import java.io.File;
+import java.io.IOException;
 
 import javax.swing.BorderFactory;
 import javax.swing.Box;
@@ -14,6 +15,12 @@ import javax.swing.JTextField;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.gui.ImportDialog;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
@@ -33,6 +40,8 @@ public class FileSelectionView extends JPanel {
 	private JTextField response;
 	
 	private DocChangeListener docChange;
+	
+	private Document jdomDoc;
 
 	public FileSelectionView(ImportDialog owner) {
 		setLayout(new BorderLayout(8,8));
@@ -111,13 +120,29 @@ public class FileSelectionView extends JPanel {
 		
 		path.setText(f.getAbsolutePath());
 		loadFile(f);
+		parent.setChangesMade(true);
 	}
 
 	private void loadFile(File f) {
-		// TODO implement loading files
-		Log.log("Loading File not yet implemented.");
+		jdomDoc = loadXMLfromFile(f);
+		
+		XMLOutputter o = new XMLOutputter(Format.getPrettyFormat());
+		Log.log();
+		Log.log("Loaded XML Document:");
+		Log.log(o.outputString(jdomDoc));
 		
 		parent.checkFileLoaded(this);
+	}
+	
+	private Document loadXMLfromFile(File f) {
+		Document r = null;
+		try {
+			r = new SAXBuilder().build(f);
+		} catch (Exception e) {
+			Log.log("Failed to load XML Document.");
+			e.printStackTrace();
+		}
+		return r;
 	}
 	
 	public void responde(String msg) {
@@ -125,8 +150,7 @@ public class FileSelectionView extends JPanel {
 	}
 
 	public boolean hasFile() {
-		// TODO implement checking, if a file has been loaded
-		return true;
+		return !(jdomDoc == null);
 	}
 
 	public boolean hasID() {
@@ -153,6 +177,10 @@ public class FileSelectionView extends JPanel {
 		public void removeUpdate(DocumentEvent arg0) {
 			parent.checkFileLoaded(FileSelectionView.this);
 		}
+	}
+
+	public Document getDoc() {
+		return jdomDoc;
 	}
 
 }
