@@ -52,6 +52,8 @@ public class ImportDialog extends JDialog {
 	private boolean somethingChanged = false;
 	
 	private Document jdomDoc;
+	private String id;
+	private String shelfmark;
 
 	public ImportDialog(MainGUI p) {
 		super(p, "Import Text", true);
@@ -290,6 +292,8 @@ public class ImportDialog extends JDialog {
 			return;
 		}
 		jdomDoc = view_fs.getDoc();
+		id = view_fs.getID();
+		shelfmark = view_fs.getShelfmark();
 		
 		if (jdomDoc == null)
 			Log.log("No XML Document found.");

@@ -160,6 +160,13 @@ public class FileSelectionView extends JPanel {
 	public String getID() {
 		return id_input.getText().trim();
 	}
+
+	public String getShelfmark() {
+		String res = shelfmark_input.getText().trim();
+		if (res == null || res.isEmpty())
+			res = getID();
+		return res;
+	}
 	
 	private class DocChangeListener implements DocumentListener {
 
