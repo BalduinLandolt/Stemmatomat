@@ -17,6 +17,11 @@ public class Text {
 		textContent = text;
 	}
 
+	public Text(String id, String sm) {
+		identifier=id;
+		shelfmark=sm;
+	}
+
 	public String getIdentifier() {
 		return identifier;
 	}
@@ -50,6 +55,18 @@ public class Text {
 			v.add(s);
 		}
 		return v;
+	}
+
+	public void appendText(String txt) {
+		if (textContent==null || textContent.isEmpty()) {
+			textContent = txt;
+		} else {
+			textContent += " " + txt;
+		}
+	}
+
+	public void appendSegmentation() {
+		textContent += "£";
 	}
 	
 	

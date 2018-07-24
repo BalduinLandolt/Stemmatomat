@@ -1,31 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0">
-   <teiHeader>
-      <fileDesc>
-         <titleStmt>
-            <title>Title</title>
-         </titleStmt>
-         <publicationStmt>
-            <p>Publication Information</p>
-         </publicationStmt>
-         <sourceDesc>
-            <p>Information about the source</p>
-         </sourceDesc>
-      </fileDesc>
-      
-   </teiHeader>
-   <text>
-      <body> 
-         
-         <!-- Add your data between here ... -->
-         
-         
-         <div>
-         bla
-         </div>
-         
-         <!-- ... and here. -->
-         
-      </body>
-   </text>
+	<teiHeader>
+		<fileDesc>
+			<titleStmt>
+				<title>Title</title>
+			</titleStmt>
+			<publicationStmt>
+				<p>Publication Information</p>
+			</publicationStmt>
+			<sourceDesc>
+				<p>Information about the source</p>
+			</sourceDesc>
+		</fileDesc>
+
+	</teiHeader>
+	<text>
+		<body>
+
+			<!-- Add your data between here ... -->
+
+
+			<div>
+				<lg>
+					<l>Mun eg frá karli</l>
+					<l>kunna að segja,</l>
+					<l>sá eð fyrri bjó</l>
+					<l>í fornum sið;</l>
+					<l>konu átti hann sér</l>
+					<l>af kyni góðu,</l>
+					<l>varð þeim brátt skapað</l>
+					<l>barn að eiga.</l>
+				</lg>
+			</div>
+
+			<!-- ... and here. -->
+
+		</body>
+	</text>
 </TEI>

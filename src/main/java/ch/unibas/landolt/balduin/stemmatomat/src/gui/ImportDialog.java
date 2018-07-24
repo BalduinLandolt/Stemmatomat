@@ -127,9 +127,9 @@ public class ImportDialog extends JDialog {
 	}
 
 	public void run() {
-		setMinimumSize(new Dimension(800, 550));
+		setMinimumSize(new Dimension(800, 750));
 		pack();
-		setLocation(300, 200);
+		setLocation(300, 150);
 		switchToFileSelectionView(true);
 		setVisible(true);
 	}
@@ -199,6 +199,8 @@ public class ImportDialog extends JDialog {
 		if (forward)
 			view_x = new XMLSelectionView(this);
 		contents.add(view_x, BorderLayout.CENTER);
+		
+		view_x.refresh();
 
 		// TODO display xml tags as check boxes
 		// TODO display text according to selection
@@ -276,21 +278,12 @@ public class ImportDialog extends JDialog {
 		Log.log("Switched to Preview View.");
 	}
 
-	private void getTextFromEditView() {
-		if (!somethingChanged) {
-			Log.log("No change has been made.");
-			return;
-		}
-
-		// TODO implement this
-		Log.log("should get text from text edit now; not yet implemented!");
-	}
-
 	private void getTextFromFileSelection() {
 		if (!somethingChanged) {
 			Log.log("No change has been made.");
 			return;
 		}
+		
 		jdomDoc = view_fs.getDoc();
 		id = view_fs.getID();
 		shelfmark = view_fs.getShelfmark();
@@ -310,6 +303,16 @@ public class ImportDialog extends JDialog {
 
 		// TODO implement this
 		Log.log("should get text from xml selection now; not yet implemented!");
+	}
+
+	private void getTextFromEditView() {
+		if (!somethingChanged) {
+			Log.log("No change has been made.");
+			return;
+		}
+
+		// TODO implement this
+		Log.log("should get text from text edit now; not yet implemented!");
 	}
 
 	private void removeActionListeners(JButton btn) {
@@ -359,6 +362,18 @@ public class ImportDialog extends JDialog {
 
 	public void setChangesMade(boolean b) {
 		somethingChanged = b;
+	}
+
+	public Document getXMLDocument() {
+		return jdomDoc;
+	}
+
+	public String getID() {
+		return id;
+	}
+
+	public String getShelfmark() {
+		return shelfmark;
 	}
 
 
