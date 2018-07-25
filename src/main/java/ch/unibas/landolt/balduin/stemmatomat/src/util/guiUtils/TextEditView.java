@@ -48,6 +48,7 @@ public class TextEditView extends JPanel implements DocumentListener {
 	private void textChanged() {
 		generateText();
 		refresh();
+		parent.setChangesMade(true);
 	}
 
 	private void generateText() {

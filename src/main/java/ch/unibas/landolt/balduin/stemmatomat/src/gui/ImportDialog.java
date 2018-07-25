@@ -1,6 +1,7 @@
 package ch.unibas.landolt.balduin.stemmatomat.src.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dialog;
 import java.awt.Dimension;
 import java.awt.Frame;
@@ -18,6 +19,9 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
@@ -270,9 +274,17 @@ public class ImportDialog extends JDialog {
 
 		removeActionListeners(btn_back);
 		btn_back.addActionListener(e -> switchToTextEditView(false));
+		
+		contents.removeAll();
+		JTextArea ta = new JTextArea(text.getTextWithPilcrow());
+		ta.setEditable(false);
+		ta.setBackground(footer.getBackground());
+		JScrollPane sp = new JScrollPane(ta);
+		contents.add(sp, BorderLayout.CENTER);
+		
+		revalidate();
+		repaint();
 
-
-		// TODO set contents
 		Log.log("Switched to Preview View.");
 	}
 
