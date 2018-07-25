@@ -68,12 +68,13 @@ public class Text {
 	public void appendSegmentation() {
 		if (textContent == null)
 			textContent = "";
-		textContent += " £";
+		textContent += "£";
+		textContent = textContent.replace("£ ", "£");
 	}
 	
 	public String getTextWithPilcrow() {
 		String s = getTextContent();
-		String sep = " ¶"+Log.lineSep;
+		String sep = "¶"+Log.lineSep;
 		String res = s.replace("£", sep);
 		return res;
 	}

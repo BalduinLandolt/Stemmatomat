@@ -201,9 +201,6 @@ public class ImportDialog extends JDialog {
 		contents.add(view_x, BorderLayout.CENTER);
 		
 		view_x.refresh();
-
-		// TODO display xml tags as check boxes
-		// TODO display text according to selection
 		
 		revalidate();
 		repaint();
@@ -241,7 +238,8 @@ public class ImportDialog extends JDialog {
 		if (forward)
 			view_txt = new TextEditView(this);
 		contents.add(view_txt, BorderLayout.CENTER);
-		//TODO display text
+		
+		view_txt.refresh();
 		
 		revalidate();
 		repaint();
@@ -300,9 +298,10 @@ public class ImportDialog extends JDialog {
 			Log.log("No change has been made.");
 			return;
 		}
-
-		// TODO implement this
-		Log.log("should get text from xml selection now; not yet implemented!");
+		
+		text = view_x.getText();
+		
+		Log.log("got Text from XML Selection view.");
 	}
 
 	private void getTextFromEditView() {
@@ -310,9 +309,10 @@ public class ImportDialog extends JDialog {
 			Log.log("No change has been made.");
 			return;
 		}
-
-		// TODO implement this
-		Log.log("should get text from text edit now; not yet implemented!");
+		
+		text = view_txt.getText();
+		
+		Log.log("got Text from Edit view.");
 	}
 
 	private void removeActionListeners(JButton btn) {

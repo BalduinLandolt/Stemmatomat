@@ -168,7 +168,6 @@ public class XMLSelectionView extends JPanel {
 
 	private void refresh_txt() {
 		generateText();
-		//TODO display text
 		textArea.setText(text.getTextWithPilcrow());
 	}
 
@@ -323,6 +322,10 @@ public class XMLSelectionView extends JPanel {
 			return false;
 		}
 		
+	}
+
+	public Text getText() {
+		return text;
 	}
 
 }
