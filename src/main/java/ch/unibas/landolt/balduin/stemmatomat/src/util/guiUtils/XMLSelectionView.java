@@ -169,7 +169,7 @@ public class XMLSelectionView extends JPanel {
 	private void refresh_txt() {
 		generateText();
 		//TODO display text
-		textArea.setText(text.getTextContent());
+		textArea.setText(text.getTextWithPilcrow());
 	}
 
 	private void generateText() {

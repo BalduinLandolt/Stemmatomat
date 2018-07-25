@@ -66,9 +66,17 @@ public class Text {
 	}
 
 	public void appendSegmentation() {
-		textContent += "£";
+		if (textContent == null)
+			textContent = "";
+		textContent += " £";
 	}
 	
+	public String getTextWithPilcrow() {
+		String s = getTextContent();
+		String sep = " ¶"+Log.lineSep;
+		String res = s.replace("£", sep);
+		return res;
+	}
 	
 
 }
