@@ -10,10 +10,12 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Vector;
 
 import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -25,6 +27,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableColumn;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
@@ -38,7 +41,6 @@ import ch.unibas.landolt.balduin.stemmatomat.src.util.TextDisplayTableModel;
 public class MainGUI extends JFrame implements WindowListener, Loggable {
 	
 	private StemmatomatMain parent;
-	private Actions actions;
 	
 	// Components
 	private JTabbedPane tabs;
@@ -50,6 +52,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	private JMenuBar menuBar;
 	private JMenu m_file;
 	private JMenuItem mi_importText;
+	private JMenuItem mi_saveProject;
 	private JMenu m_edit;
 	private JMenu m_settings;
 	private JCheckBoxMenuItem cmi_autoOpenLog;
@@ -60,7 +63,6 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		super("Stemmat-o-mat!");
 		
 		this.parent = parent;
-		actions = new Actions();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		addWindowListener(this);
 		setExtendedState(MAXIMIZED_BOTH);
@@ -83,8 +85,14 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		menuBar.add(m_file);
 		
 		mi_importText = new JMenuItem("Import Text");
-		mi_importText.addActionListener(e -> actions.importText());
+		mi_importText.addActionListener(e -> importText());
 		m_file.add(mi_importText);
+		
+		m_file.addSeparator();
+		
+		mi_saveProject = new JMenuItem("Save Project");
+		mi_saveProject.addActionListener(e -> saveProject());
+		m_file.add(mi_saveProject);
 		
 		m_edit = new JMenu("Edit");
 		menuBar.add(m_edit);
@@ -151,6 +159,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		refreshSettings();
 		displayTexts(null);
 		setVisible(true);
+		refreshUI();
 		Log.log("GUI shown.");
 	}
 
@@ -203,6 +212,8 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		repaint();
 		
 		adjustColumnWidth(textTable);
+		
+		refreshUI();
 	}
 	
 
@@ -242,15 +253,57 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	public void windowOpened(WindowEvent arg0) {}
 	public void windowClosed(WindowEvent arg0) {}
 	
-	private class Actions{
 
-		public void importText() {
-			Log.log("Action called: import text");
-			openImportDialog();
+	public void importText() {
+		Log.log("Action called: import text");
+		openImportDialog();
+	}
+
+	public void saveProject() {
+		Log.log("Action called: save project");
+		File f = parent.getSaveDirectory();
+		
+		if (f == null) {
+			f = getSaveDirectory();
 		}
 		
+		Log.log("Saving to: "+f.getAbsolutePath());
+		
+		
+		
+		//TODO
 	}
 	
+	private File getSaveDirectory() {
+		File f = new File(".");
+		f = f.getParentFile();
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(f);
+		chooser.setFileFilter(new FileNameExtensionFilter("xml", "xml"));
+		int res = chooser.showOpenDialog(this);
+		
+		if (res != JFileChooser.APPROVE_OPTION) {
+			Log.log("No File Chosen.");
+			return null;
+		}
+		
+		f = chooser.getSelectedFile();
+		if (!f.getName().endsWith(".xml"))
+			f = new File(f.getPath()+".xml");
+		
+		//TODO check if it exists. ask about override
+//		
+//		if (!f.exists())
+//			f.createNewFile()
+		
+//		if (!f.exists() || f.isDirectory() || !f.getName().endsWith(".xml")) {
+//			Log.log("Invalid File Chosen.");
+//			return;
+//		}
+		
+		return f;
+	}
+
 	private class PopUpListener extends MouseAdapter{
 		
 		public void mouseClicked(MouseEvent e) {
@@ -287,6 +340,11 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 	public ArrayList<Text> getTexts() {
 		return parent.getTexts();
+	}
+	
+	public void refreshUI() {
+		mi_saveProject.setEnabled(parent.hasData());
+		//TODO stuff here
 	}
 
 }

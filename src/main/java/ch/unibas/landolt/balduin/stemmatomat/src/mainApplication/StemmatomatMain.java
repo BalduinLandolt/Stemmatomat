@@ -1,5 +1,6 @@
 package ch.unibas.landolt.balduin.stemmatomat.src.mainApplication;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
@@ -70,5 +71,23 @@ public class StemmatomatMain {
 	public ArrayList<Text> getTexts() {
 		return texts;
 	}
+
+	public boolean hasData() {
+		return !(texts == null || texts.isEmpty());
+	}
+
+	public File getSaveDirectory() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	//TODO todos:
+	//TODO data stage architecture (including menu, keybinding)
+	//TODO loading project (in menu)
+	//TODO quit application (in menu)
+	//TODO nexus export
+	//TODO doing alignment on right click
+	//TODO doing ecvaluation on left click
+	//TODO option save as ... in menu
 	
 }
