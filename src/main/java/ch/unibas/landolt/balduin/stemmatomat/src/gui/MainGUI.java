@@ -25,6 +25,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.table.TableColumn;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
@@ -191,10 +192,43 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		
 		textTable = new JTable(model);
 		textTable.addMouseListener(new PopUpListener());
+		textTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
+		textTable.doLayout();
 		JScrollPane sp = new JScrollPane(textTable);
+		//textTable.setFillsViewportHeight(true);
+		sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		workspace.add(sp, BorderLayout.CENTER);
+		
+		revalidate();
+		repaint();
+		
+		adjustColumnWidth(textTable);
 	}
 	
+
+	private void adjustColumnWidth(JTable t) { //TODO geht so nicht
+		TableColumn c = null;
+		for (int i=0; i<t.getColumnCount(); i++) {
+			c = t.getColumnModel().getColumn(i);
+			c.sizeWidthToFit();
+			c.setPreferredWidth(c.getPreferredWidth()+50);
+			//c.setMinWidth(c.getPreferredWidth()+50);
+			Log.log("Col: "+i+" Width: "+c.getWidth()+" PrefWidth: "+c.getPreferredWidth());
+		}
+
+		revalidate();
+		repaint();
+
+		for (int i=0; i<t.getColumnCount(); i++) {
+			c = t.getColumnModel().getColumn(i);
+			//c.setPreferredWidth(c.getPreferredWidth()+20);
+			//c.setMinWidth(c.getPreferredWidth()+50);
+			Log.log("Col: "+i+" Width: "+c.getWidth()+" PrefWidth: "+c.getPreferredWidth());
+		}
+	}
+
+
+
 
 	public void windowClosing(WindowEvent arg0) {
 		Log.log("Window Closing requested.");
