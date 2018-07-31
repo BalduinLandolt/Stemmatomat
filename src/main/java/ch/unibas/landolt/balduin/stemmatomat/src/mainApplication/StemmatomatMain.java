@@ -2,8 +2,12 @@ package ch.unibas.landolt.balduin.stemmatomat.src.mainApplication;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.gui.ImportDialog;
 import ch.unibas.landolt.balduin.stemmatomat.src.gui.MainGUI;
@@ -17,6 +21,7 @@ public class StemmatomatMain {
 	private Preferences userPreferences;
 	
 	private ArrayList<Text> texts = new ArrayList<Text>();
+	private File saveDirectory = null;
 
 	public StemmatomatMain() {
 		super();
@@ -77,8 +82,31 @@ public class StemmatomatMain {
 	}
 
 	public File getSaveDirectory() {
-		// TODO Auto-generated method stub
-		return null;
+		return saveDirectory;
+	}
+
+	public void setSaveDirectory(File f) {
+		saveDirectory = f;
+	}
+
+	public void closeProject() {
+		Log.log("Closing current project.");
+		// TODO handle unsaved changes etc.
+		texts = new ArrayList<Text>();
+		saveDirectory = null;
+		mainGUI.displayTexts(texts);
+	}
+
+	public void loadFromDoc(Document d) {
+		Element root = d.getRootElement();
+		LinkedList<Element> cc = new LinkedList<>(root.getChildren("text"));
+		for (Element c: cc) {
+			Text t = Text.buildFromXML(c);
+			texts.add(t);
+		}
+		
+		mainGUI.displayTexts(texts);
+		Log.log("Loading successful.");
 	}
 	
 	//TODO todos:

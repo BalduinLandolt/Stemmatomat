@@ -123,6 +123,21 @@ public class Text {
 			segments.getLast().append(sb.toString());//TODO shold I really add it?
 		}
 	}
+
+	public static Text buildFromXML(Element c) {
+		String sm = c.getAttributeValue("shelfmark");
+		String id = c.getAttributeValue("id");
+		
+		Text t = new Text(id, sm);
+		
+		LinkedList<Element> segments = new LinkedList<>(c.getChildren("segment"));
+		for (Element seg: segments) {
+			t.appendText(seg.getTextNormalize());
+			t.appendSegmentation();
+		}
+		
+		return t;
+	}
 	
 
 }

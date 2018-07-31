@@ -32,6 +32,7 @@ import javax.swing.table.TableColumn;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -58,6 +59,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	private JMenu m_file;
 	private JMenuItem mi_importText;
 	private JMenuItem mi_saveProject;
+	private JMenuItem mi_loadProject;
 	private JMenu m_edit;
 	private JMenu m_settings;
 	private JCheckBoxMenuItem cmi_autoOpenLog;
@@ -94,10 +96,14 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		m_file.add(mi_importText);
 		
 		m_file.addSeparator();
-		
+
 		mi_saveProject = new JMenuItem("Save Project");
 		mi_saveProject.addActionListener(e -> saveProject());
 		m_file.add(mi_saveProject);
+		
+		mi_loadProject = new JMenuItem("Load Project");
+		mi_loadProject.addActionListener(e -> loadProject());
+		m_file.add(mi_loadProject);
 		
 		m_edit = new JMenu("Edit");
 		menuBar.add(m_edit);
@@ -111,6 +117,77 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		m_settings.add(cmi_autoOpenLog);
 		
 		// TODO option to remove text/texts
+	}
+
+
+
+
+	private void loadProject() {
+		Log.log("Action called: load project");
+		
+		//TODO handle potential unsaved changes
+		
+		File f = getFileToLoad();
+		
+		if (f == null || !f.exists()) {
+			Log.log("No File to Load.");
+			return;
+		}
+
+		Log.log("Loading from File: "+f.getAbsolutePath());
+		
+		Document d = getDataFromFile(f);
+		if (!isValidSave(d)) {
+			Log.log("File is not a valid saved project.");
+			return;
+		}
+		
+		parent.closeProject();
+		parent.loadFromDoc(d);
+		parent.setSaveDirectory(f);
+	}
+
+
+
+
+	private boolean isValidSave(Document d) {
+		// TODO validate file
+		return true;
+	}
+
+
+
+
+	private Document getDataFromFile(File f) {
+		Document r = null;
+		try {
+			r = new SAXBuilder().build(f);
+		} catch (Exception e) {
+			Log.log("Failed to load XML Document.");
+			e.printStackTrace();
+		}
+		return r;
+	}
+
+
+
+
+	private File getFileToLoad() {
+		File f = new File(".");
+		f = f.getParentFile();
+		JFileChooser chooser = new JFileChooser();
+		chooser.setCurrentDirectory(f);
+		chooser.setFileFilter(new FileNameExtensionFilter("xml", "xml"));
+		int res = chooser.showOpenDialog(this);
+		
+		if (res != JFileChooser.APPROVE_OPTION) {
+			Log.log("No File Chosen.");
+			return null;
+		}
+		
+		f = chooser.getSelectedFile();
+		
+		return f;
 	}
 
 
@@ -267,6 +344,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		
 		if (f == null) {
 			f = getSaveDirectory();
+			parent.setSaveDirectory(f);
 		}
 		
 		Log.log("Saving to: "+f.getAbsolutePath());
@@ -315,7 +393,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		JFileChooser chooser = new JFileChooser();
 		chooser.setCurrentDirectory(f);
 		chooser.setFileFilter(new FileNameExtensionFilter("xml", "xml"));
-		int res = chooser.showOpenDialog(this);
+		int res = chooser.showSaveDialog(this);
 		
 		if (res != JFileChooser.APPROVE_OPTION) {
 			Log.log("No File Chosen.");
