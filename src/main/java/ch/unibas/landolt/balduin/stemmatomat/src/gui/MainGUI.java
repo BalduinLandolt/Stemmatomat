@@ -26,6 +26,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
@@ -66,7 +67,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	private JMenu m_settings;
 	private JCheckBoxMenuItem cmi_autoOpenLog;
 	
-	private JPopupMenu popup;
+	private CustomPopup popup;
 
 	public MainGUI(StemmatomatMain parent){
 		super("Stemmat-o-mat!");
@@ -218,7 +219,6 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		setContentPane(p);
 		
 		setUpMenu();
-		createPopUp();
 		
 		tabs = new JTabbedPane();
 		p.add(tabs);
@@ -236,10 +236,17 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 
-	private void createPopUp() {
-		popup = new JPopupMenu();
-		JMenuItem test = new JMenuItem("Test");
-		popup.add(test);
+	private void createPopUp(MouseEvent e) {
+		popup = new CustomPopup(e);
+
+		if (SwingUtilities.isRightMouseButton(e)) {
+			popup.setUpAsRightClick();
+		} else if (SwingUtilities.isLeftMouseButton(e)) {
+			popup.setUpAsLeftClick();
+		} else {
+			Log.log("clicked weird mouse button.");
+			return;
+		}
 	}
 
 
@@ -442,40 +449,49 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		
 		public void mouseClicked(MouseEvent e) {
 			Log.log("Mouse clicked on Table. Showing popup.");
+			createPopUp(e);
             popup.show(e.getComponent(), e.getX(), e.getY());
-            Log.log(e.getComponent());
-            Log.log(e.getPoint());
-            Point p = e.getPoint();
-            String s = textTable.getModel().getValueAt(textTable.rowAtPoint(p), textTable.columnAtPoint(p)).toString();
-            Log.log(s);
 		}
-	    
-	    
-// would be applicable, if popup should only show on right click.
-//		public void mousePressed(MouseEvent e) {
-//	        maybeShowPopup(e);
-//	    }
-//
-//	    public void mouseReleased(MouseEvent e) {
-//	        maybeShowPopup(e);
-//	    }
-//
-//	    private void maybeShowPopup(MouseEvent e) {
-//	        if (e.isPopupTrigger()) {
-//	            popup.show(e.getComponent(), e.getX(), e.getY());
-//	            Log.log(e.getComponent());
-//	            Log.log(e.getPoint());
-//	            Point p = e.getPoint();
-//	            String s = textTable.getModel().getValueAt(textTable.rowAtPoint(p), textTable.columnAtPoint(p)).toString();
-//	            Log.log(s);
-//	        }
-//	    }
+		
+	}
+	
+	private class CustomPopup extends JPopupMenu{
+		MouseEvent e;
+		Text clickedText;
+		int clickedSegmentIndex;
+		String clickedSegmentText;
+
+		public CustomPopup(MouseEvent ev) {
+			e = ev;
+
+	        Point p = e.getPoint();
+	        TextDisplayTableModel model = (TextDisplayTableModel) textTable.getModel();
+	        clickedText = model.getTextAtRow(textTable.rowAtPoint(p));
+	        clickedSegmentIndex = textTable.columnAtPoint(p)-2;
+	        clickedSegmentText = clickedText.getSegmentAt(clickedSegmentIndex);
+	        
+	        Log.log("Click: Text '"+clickedText.getIdentifier()+"' Segment #"+clickedSegmentIndex+" "+clickedSegmentText);
+		}
+
+		public void setUpAsLeftClick() {
+			// TODO Auto-generated method stub
+			
+		}
+
+		public void setUpAsRightClick() {
+			// TODO Auto-generated method stub
+			
+		}
+		
 	}
 
 	public ArrayList<Text> getTexts() {
 		return parent.getTexts();
 	}
-	
+
+
+
+
 	public void refreshUI() {
 		mi_saveProject.setEnabled(parent.hasData());
 		mi_saveAsProject.setEnabled(parent.hasData());

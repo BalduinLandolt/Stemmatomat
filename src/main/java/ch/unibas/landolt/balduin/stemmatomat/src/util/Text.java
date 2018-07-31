@@ -60,7 +60,7 @@ public class Text {
 	}
 
 	public String getSegmentAt(int c) {
-		if (c >= getLength())
+		if (c >= getLength() || c<0)
 			return "";
 		return segments.get(c).toString();
 	}

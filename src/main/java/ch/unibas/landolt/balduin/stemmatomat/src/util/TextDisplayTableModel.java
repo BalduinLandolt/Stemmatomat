@@ -64,6 +64,13 @@ public class TextDisplayTableModel extends AbstractTableModel {
 	public boolean isCellEditable(int r, int c) {
 		return false;
 	}
+
+	public Text getTextAtRow(int r) {
+		if (r<rows)
+			return texts.get(r);
+		else
+			return null;
+	}
 	
 
 }
