@@ -1,6 +1,7 @@
 package ch.unibas.landolt.balduin.stemmatomat.src.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
@@ -28,6 +29,7 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
@@ -202,15 +204,15 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		textTable = new JTable(model);
 		textTable.addMouseListener(new PopUpListener());
 		textTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		textTable.doLayout();
+		//textTable.doLayout();
 		JScrollPane sp = new JScrollPane(textTable);
 		//textTable.setFillsViewportHeight(true);
 		sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		workspace.add(sp, BorderLayout.CENTER);
 		
-		revalidate();
-		repaint();
-		
+//		revalidate();
+//		repaint();
+//		
 		adjustColumnWidth(textTable);
 		
 		refreshUI();
@@ -218,24 +220,50 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	
 
 	private void adjustColumnWidth(JTable t) { //TODO geht so nicht
-		TableColumn c = null;
+		TableColumn col = null;
 		for (int i=0; i<t.getColumnCount(); i++) {
-			c = t.getColumnModel().getColumn(i);
-			c.sizeWidthToFit();
-			c.setPreferredWidth(c.getPreferredWidth()+50);
-			//c.setMinWidth(c.getPreferredWidth()+50);
-			Log.log("Col: "+i+" Width: "+c.getWidth()+" PrefWidth: "+c.getPreferredWidth());
-		}
+			col = t.getColumnModel().getColumn(i);
+		    int preferredWidth = col.getMinWidth();
+		    
+		    for (int row = 0; row < t.getRowCount(); row++) {
+		    	TableCellRenderer cellRenderer = t.getCellRenderer(row, i);
+		        Component c = t.prepareRenderer(cellRenderer, row, i);
+		        int width = c.getPreferredSize().width + t.getIntercellSpacing().width;
+		        preferredWidth = Math.max(preferredWidth, width);
+		    }
+		    
+		    //"shelfmark" has a long header
+		    if (i==0)
+		    	preferredWidth+=30;
+		    
+		    col.setMaxWidth(preferredWidth+100);
+		    col.setPreferredWidth(preferredWidth+30);
+		    col.setWidth(preferredWidth+30);
+		    Log.log("Col: "+i+" Width: "+col.getWidth()+" PrefWidth: "+preferredWidth);
+		    revalidate();
+		    repaint();
 
-		revalidate();
-		repaint();
-
-		for (int i=0; i<t.getColumnCount(); i++) {
-			c = t.getColumnModel().getColumn(i);
-			//c.setPreferredWidth(c.getPreferredWidth()+20);
-			//c.setMinWidth(c.getPreferredWidth()+50);
-			Log.log("Col: "+i+" Width: "+c.getWidth()+" PrefWidth: "+c.getPreferredWidth());
 		}
+		
+		
+//		TableColumn c = null;
+//		for (int i=0; i<t.getColumnCount(); i++) {
+//			c = t.getColumnModel().getColumn(i);
+//			c.sizeWidthToFit();
+//			c.setPreferredWidth(c.getPreferredWidth()+50);
+//			//c.setMinWidth(c.getPreferredWidth()+50);
+//			Log.log("Col: "+i+" Width: "+c.getWidth()+" PrefWidth: "+c.getPreferredWidth());
+//		}
+//
+//		revalidate();
+//		repaint();
+//
+//		for (int i=0; i<t.getColumnCount(); i++) {
+//			c = t.getColumnModel().getColumn(i);
+//			//c.setPreferredWidth(c.getPreferredWidth()+20);
+//			//c.setMinWidth(c.getPreferredWidth()+50);
+//			Log.log("Col: "+i+" Width: "+c.getWidth()+" PrefWidth: "+c.getPreferredWidth());
+//		}
 	}
 
 
