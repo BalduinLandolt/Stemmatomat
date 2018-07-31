@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Vector;
 
+import org.jdom2.Element;
+
 public class Text {
 
 	private String identifier;
@@ -98,6 +100,17 @@ public class Text {
 
 	public String getSegmentAt(int c) {
 		return segments.get(c).toString();
+	}
+
+	public Element getXMLRepresentation() {
+		Element e = new Element("text");
+		e.setAttribute("shelfmark", shelfmark);
+		e.setAttribute("id", identifier);
+		
+		
+		// TODO add data to text
+		
+		return e;
 	}
 	
 

@@ -299,10 +299,14 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	}
 	
 	private Document getDataForSave() {
-		Element e = new Element("xml");
+		Element e = new Element("StremmatomatProject");
+		e.setAttribute("Date", java.time.LocalDateTime.now().toString());
 		Document d = new Document(e);
 		
-		// TODO create actual data
+		for (Text t: parent.getTexts()) {
+			Element el_txt = t.getXMLRepresentation();
+			e.addContent(el_txt);
+		}
 		
 		return d;
 	}
