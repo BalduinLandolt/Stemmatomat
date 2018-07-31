@@ -118,6 +118,11 @@ public class Text {
 		// TODO Auto-generated method stub
 		return -1;
 	}
+
+	public void setStemVal(int clickedSegmentIndex, int val) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }

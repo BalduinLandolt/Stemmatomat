@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
@@ -13,6 +15,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -473,20 +477,137 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	        Log.log("Click: Text '"+clickedText.getIdentifier()+"' Segment #"+clickedSegmentIndex+" "+clickedSegmentText);
 		}
 
-		public void setUpAsLeftClick() {
-			// TODO Auto-generated method stub
+		public void setUpAsLeftClick() {		
+			addExistingOptions();
+			addSeparator();
+			addNextOption();
+		}
+
+		private void addNextOption() {
+			int v = getHighestVal()+1;
+			JMenuItem m = new JMenuItem(v+" [not yet in use]");
+			m.setActionCommand(""+v);
+			m.addActionListener(e -> setMeToStemVal(Integer.parseInt(e.getActionCommand())));
+			add(m);
+		}
+
+		private void addExistingOptions() {
+			int highest = getHighestVal();
+
+			HashMap<Integer, String> map = new HashMap<>();
 			
+			for (Text t: parent.getTexts()) {
+				if (t == clickedText) {
+					continue;
+				}
+				String s = t.getSegmentAt(clickedSegmentIndex);
+				int stemVal = t.getStemmaticValue(clickedSegmentIndex);
+				map.put(Integer.valueOf(stemVal), s);
+			}
+			
+			for (int i=0; i<=highest; i++) {
+				String s = map.get(Integer.valueOf(i));
+				
+				JMenuItem m = new JMenuItem(i+" ("+s+")");
+				m.setActionCommand(""+i);
+				m.addActionListener(e -> setMeToStemVal(Integer.parseInt(e.getActionCommand())));
+				add(m);
+			}
+		}
+
+		private void setMeToStemVal(int val) {
+			clickedText.setStemVal(clickedSegmentIndex, val);
+			Log.log("Changed Stemmatic Value: (Text: "+clickedText.getIdentifier()+", '"+clickedSegmentText+"') to "+val);
+		}
+
+		private int getHighestVal() {
+			int max = 0;
+			for (Text t: parent.getTexts()) {
+				int stemVal = t.getStemmaticValue(clickedSegmentIndex);
+				max = Math.max(max, stemVal);
+			}
+			return max;
 		}
 
 		public void setUpAsRightClick() {
-			// TODO Auto-generated method stub
+			//TODO enable items, as soon as implemented
+			JMenuItem i = null;
+
+			i = new JMenuItem("Edit Text");
+			i.setEnabled(false);
+			i.addActionListener(e -> editText(clickedText));
+			add(i);
 			
+			addSeparator();
+			
+			i = new JMenuItem("Delete Segment");
+			i.setEnabled(false);
+			i.addActionListener(e -> removeSegmentFromText(clickedText, clickedSegmentIndex));
+			add(i);
+			
+			i = new JMenuItem("<< Move Segment Left (removes content to the left)");
+			i.setEnabled(false);
+			i.addActionListener(e -> moveSegmentToLeft(clickedText, clickedSegmentIndex));
+			add(i);
+			
+			i = new JMenuItem(">> Move Segment Right");
+			i.setEnabled(false);
+			i.addActionListener(e -> moveSegmentToRight(clickedText, clickedSegmentIndex));
+			add(i);
+			
+			addSeparator();
+			
+			i = new JMenuItem("Split Segment");
+			i.setEnabled(false);
+			i.addActionListener(e -> splitSegment(clickedText, clickedSegmentIndex));
+			add(i);
+			
+			i = new JMenuItem("Split Column");
+			i.setEnabled(false);
+			i.addActionListener(e -> splitColum(clickedSegmentIndex));
+			add(i);
 		}
 		
 	}
 
 	public ArrayList<Text> getTexts() {
 		return parent.getTexts();
+	}
+
+
+
+
+	public void splitSegment(Text text, int segmentIndex) {
+		// TODO Auto-generated method stub
+	}
+
+
+	public void splitColum(int segmentIndex) {
+		// TODO Auto-generated method stub
+	}
+
+
+	public void moveSegmentToLeft(Text text, int segmentIndex) {
+		// TODO Auto-generated method stub
+	}
+
+	
+	public void moveSegmentToRight(Text text, int segmentIndex) {
+		// TODO Auto-generated method stub
+	}
+
+
+
+
+	public void removeSegmentFromText(Text text, int segmentIndex) {
+		// TODO Auto-generated method stub
+	}
+
+
+
+
+	private void editText(Text text) {
+		// TODO Auto-generated method stub
 	}
 
 
