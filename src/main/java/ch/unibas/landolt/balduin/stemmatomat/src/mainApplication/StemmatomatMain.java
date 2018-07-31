@@ -55,8 +55,8 @@ public class StemmatomatMain {
 		savePreferences();
 		
 		Log.terminate();
-		System.out.println("Consloe only: Log is shut down.");
-		//System.exit(0);
+		System.out.println("Console only: Log is shut down.");
+		mainGUI.dispose();
 	}
 
 	private void savePreferences() {

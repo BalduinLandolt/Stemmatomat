@@ -61,6 +61,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	private JMenuItem mi_saveProject;
 	private JMenuItem mi_saveAsProject;
 	private JMenuItem mi_loadProject;
+	private JMenuItem mi_quit;
 	private JMenu m_edit;
 	private JMenu m_settings;
 	private JCheckBoxMenuItem cmi_autoOpenLog;
@@ -110,6 +111,12 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		mi_loadProject.addActionListener(e -> loadProject());
 		m_file.add(mi_loadProject);
 		
+		m_file.addSeparator();
+
+		mi_quit = new JMenuItem("Quit Application");
+		mi_quit.addActionListener(e -> quit());
+		m_file.add(mi_quit);
+		
 		m_edit = new JMenu("Edit");
 		menuBar.add(m_edit);
 		
@@ -122,6 +129,14 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		m_settings.add(cmi_autoOpenLog);
 		
 		// TODO option to remove text/texts
+	}
+
+
+
+
+	private void quit() {
+		// TODO Handle unsaved Changes
+		parent.terminate();
 	}
 
 
