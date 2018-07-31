@@ -99,6 +99,8 @@ public class Text {
 	}
 
 	public String getSegmentAt(int c) {
+		if (c >= getLength())
+			return "";
 		return segments.get(c).toString();
 	}
 
@@ -137,6 +139,18 @@ public class Text {
 		}
 		
 		return t;
+	}
+
+	public void trimEmptyEnds() {
+		while (segments.size()>0 && segments.getLast().length()==0) {
+			segments.removeLast();
+		}
+	}
+
+	public void normalizeLengthTo(int length) {
+		while (getLength()<length) {
+			appendSegmentation();
+		}
 	}
 	
 

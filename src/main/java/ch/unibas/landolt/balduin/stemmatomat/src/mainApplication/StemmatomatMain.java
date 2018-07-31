@@ -68,10 +68,27 @@ public class StemmatomatMain {
 		texts.add(newT);
 		
 		caller.dispose();
-		mainGUI.displayTexts(texts);
+		displayTexts();
 		Log.log("Imported Text");
 	}
 
+
+	private void displayTexts() {
+		normalizeTextLength();
+		mainGUI.displayTexts(texts);
+	}
+
+	private void normalizeTextLength() {
+		int longest = 0;
+		for (Text t: texts) {
+			t.trimEmptyEnds();
+			longest = Math.max(longest, t.getLength());
+		}
+
+		for (Text t: texts) {
+			t.normalizeLengthTo(longest);
+		}
+	}
 
 	public ArrayList<Text> getTexts() {
 		return texts;
@@ -105,7 +122,7 @@ public class StemmatomatMain {
 			texts.add(t);
 		}
 		
-		mainGUI.displayTexts(texts);
+		displayTexts();
 		Log.log("Loading successful.");
 	}
 	
