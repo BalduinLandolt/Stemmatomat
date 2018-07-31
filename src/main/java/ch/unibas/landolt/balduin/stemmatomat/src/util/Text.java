@@ -113,6 +113,11 @@ public class Text {
 			appendSegmentation();
 		}
 	}
+
+	public int getStemmaticValue(int c) {
+		// TODO Auto-generated method stub
+		return -1;
+	}
 	
 
 }
