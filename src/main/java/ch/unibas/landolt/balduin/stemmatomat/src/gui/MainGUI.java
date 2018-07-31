@@ -2,6 +2,7 @@ package ch.unibas.landolt.balduin.stemmatomat.src.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
@@ -12,6 +13,8 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Vector;
 
@@ -31,6 +34,11 @@ import javax.swing.JTextField;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import ch.unibas.landolt.balduin.stemmatomat.src.mainApplication.StemmatomatMain;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Log;
@@ -107,8 +115,6 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		cmi_autoOpenLog.addItemListener(e -> Settings.setOpenLogOnClose(cmi_autoOpenLog.isSelected()));
 		m_settings.add(cmi_autoOpenLog);
 		
-		// TODO add actual content
-		
 		// TODO option to remove text/texts
 	}
 
@@ -133,8 +139,6 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		logTextArea.setEditable(false);
 		sp = new JScrollPane(logTextArea);
 		tabs.addTab("Log", null, sp, "You can ignore me. Or show me to Balduin, if there's a problem.");
-		
-		//TODO more content
 	}
 
 
@@ -272,11 +276,40 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		
 		Log.log("Saving to: "+f.getAbsolutePath());
 		
+		Document d = getDataForSave();
 		
+		XMLOutputter xmlOutput = new XMLOutputter();
+		xmlOutput.setFormat(Format.getPrettyFormat());
+		try {
+			xmlOutput.output(d, new FileWriter(f));
+		} catch (IOException e) {
+			Log.log("Error: Couldn't save data to disc!");
+			e.printStackTrace();
+		}
+
+		Log.log("Saving successful.");
+		Log.log("("+f.getPath()+")");
 		
-		//TODO
+		//TODO do I want this? make it an option
+		try {
+			Desktop.getDesktop().open(f.getParentFile());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
+	private Document getDataForSave() {
+		Element e = new Element("xml");
+		Document d = new Document(e);
+		
+		// TODO create actual data
+		
+		return d;
+	}
+
+
+
+
 	private File getSaveDirectory() {
 		File f = new File(".");
 		f = f.getParentFile();
@@ -295,14 +328,6 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 			f = new File(f.getPath()+".xml");
 		
 		//TODO check if it exists. ask about override
-//		
-//		if (!f.exists())
-//			f.createNewFile()
-		
-//		if (!f.exists() || f.isDirectory() || !f.getName().endsWith(".xml")) {
-//			Log.log("Invalid File Chosen.");
-//			return;
-//		}
 		
 		return f;
 	}
@@ -347,7 +372,11 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	
 	public void refreshUI() {
 		mi_saveProject.setEnabled(parent.hasData());
+
 		//TODO stuff here
+		
+		revalidate();
+		repaint();
 	}
 
 }
