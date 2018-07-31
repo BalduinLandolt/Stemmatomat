@@ -59,12 +59,15 @@ public class TextEditView extends JPanel implements DocumentListener {
 		s = s.replace("\n", Log.lineSep);
 		
 		String[] ss = s.split(Log.lineSep);
+		int textLength = ss.length;
 		
 		for (String l: ss) {
 			l = l.trim();
 			newText.appendText(l);
 			newText.appendSegmentation();
 		}
+		
+		newText.trimToSize(textLength);
 		
 		text = newText;
 	}

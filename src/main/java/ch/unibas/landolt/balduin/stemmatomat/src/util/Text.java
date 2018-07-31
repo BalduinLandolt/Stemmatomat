@@ -112,6 +112,13 @@ public class Text {
 		
 		return e;
 	}
+
+	public void trimToSize(int textLength) {
+		while (getLength()>textLength) {
+			StringBuffer sb = segments.removeLast();
+			segments.getLast().append(sb.toString());//TODO shold I really add it?
+		}
+	}
 	
 
 }
