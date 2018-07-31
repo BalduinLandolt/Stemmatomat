@@ -128,11 +128,9 @@ public class StemmatomatMain {
 	
 	//TODO todos:
 	//TODO data stage architecture (including menu, keybinding)
-	//TODO loading project (in menu)
 	//TODO quit application (in menu)
 	//TODO nexus export
 	//TODO doing alignment on right click
 	//TODO doing ecvaluation on left click
-	//TODO option save as ... in menu
 	
 }

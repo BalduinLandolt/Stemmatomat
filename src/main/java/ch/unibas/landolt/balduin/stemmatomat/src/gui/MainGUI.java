@@ -59,6 +59,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	private JMenu m_file;
 	private JMenuItem mi_importText;
 	private JMenuItem mi_saveProject;
+	private JMenuItem mi_saveAsProject;
 	private JMenuItem mi_loadProject;
 	private JMenu m_edit;
 	private JMenu m_settings;
@@ -100,6 +101,10 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		mi_saveProject = new JMenuItem("Save Project");
 		mi_saveProject.addActionListener(e -> saveProject());
 		m_file.add(mi_saveProject);
+
+		mi_saveAsProject = new JMenuItem("Save Project As ...");
+		mi_saveAsProject.addActionListener(e -> saveAsProject());
+		m_file.add(mi_saveAsProject);
 		
 		mi_loadProject = new JMenuItem("Load Project");
 		mi_loadProject.addActionListener(e -> loadProject());
@@ -338,13 +343,22 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		openImportDialog();
 	}
 
+
+
+
+	private void saveAsProject() {
+		File f = getSaveDirectory();
+		parent.setSaveDirectory(f);
+		saveProject();
+	}
+
 	public void saveProject() {
 		Log.log("Action called: save project");
 		File f = parent.getSaveDirectory();
 		
 		if (f == null) {
-			f = getSaveDirectory();
-			parent.setSaveDirectory(f);
+			saveAsProject();
+			return;
 		}
 		
 		Log.log("Saving to: "+f.getAbsolutePath());
@@ -449,6 +463,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	
 	public void refreshUI() {
 		mi_saveProject.setEnabled(parent.hasData());
+		mi_saveAsProject.setEnabled(parent.hasData());
 
 		//TODO stuff here
 		
