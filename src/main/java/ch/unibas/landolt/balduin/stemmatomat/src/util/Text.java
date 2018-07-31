@@ -107,8 +107,12 @@ public class Text {
 		e.setAttribute("shelfmark", shelfmark);
 		e.setAttribute("id", identifier);
 		
-		
-		// TODO add data to text
+		for (StringBuffer sb: segments) {
+			Element c = new Element("segment");
+			c.addContent(sb.toString());
+			//TODO add data from user analysis
+			e.addContent(c);
+		}
 		
 		return e;
 	}

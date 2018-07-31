@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -281,7 +282,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		XMLOutputter xmlOutput = new XMLOutputter();
 		xmlOutput.setFormat(Format.getPrettyFormat());
 		try {
-			xmlOutput.output(d, new FileWriter(f));
+			xmlOutput.output(d, new FileOutputStream(f));
 		} catch (IOException e) {
 			Log.log("Error: Couldn't save data to disc!");
 			e.printStackTrace();
