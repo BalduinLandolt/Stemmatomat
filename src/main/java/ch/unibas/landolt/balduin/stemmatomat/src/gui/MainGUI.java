@@ -204,14 +204,9 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		textTable = new JTable(model);
 		textTable.addMouseListener(new PopUpListener());
 		textTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
-		//textTable.doLayout();
 		JScrollPane sp = new JScrollPane(textTable);
-		//textTable.setFillsViewportHeight(true);
 		sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		workspace.add(sp, BorderLayout.CENTER);
-		
-//		revalidate();
-//		repaint();
 //		
 		adjustColumnWidth(textTable);
 		
@@ -219,7 +214,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	}
 	
 
-	private void adjustColumnWidth(JTable t) { //TODO geht so nicht
+	private void adjustColumnWidth(JTable t) {
 		TableColumn col = null;
 		for (int i=0; i<t.getColumnCount(); i++) {
 			col = t.getColumnModel().getColumn(i);
@@ -244,26 +239,6 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		    repaint();
 
 		}
-		
-		
-//		TableColumn c = null;
-//		for (int i=0; i<t.getColumnCount(); i++) {
-//			c = t.getColumnModel().getColumn(i);
-//			c.sizeWidthToFit();
-//			c.setPreferredWidth(c.getPreferredWidth()+50);
-//			//c.setMinWidth(c.getPreferredWidth()+50);
-//			Log.log("Col: "+i+" Width: "+c.getWidth()+" PrefWidth: "+c.getPreferredWidth());
-//		}
-//
-//		revalidate();
-//		repaint();
-//
-//		for (int i=0; i<t.getColumnCount(); i++) {
-//			c = t.getColumnModel().getColumn(i);
-//			//c.setPreferredWidth(c.getPreferredWidth()+20);
-//			//c.setMinWidth(c.getPreferredWidth()+50);
-//			Log.log("Col: "+i+" Width: "+c.getWidth()+" PrefWidth: "+c.getPreferredWidth());
-//		}
 	}
 
 
