@@ -12,14 +12,7 @@ public class Text {
 	private String identifier;
 	private String shelfmark;
 	
-//	private String textContent;
 	private LinkedList<StringBuffer> segments;
-	
-//	public Text(String id, String shelfM, String text) {
-//		this(id, shelfM);
-//		textContent = text;
-//		
-//	}
 
 	public Text(String id, String sm) {
 		identifier=id;
@@ -44,47 +37,15 @@ public class Text {
 		this.shelfmark = shelfmark;
 	}
 
-//	public String getTextContent() {
-//		return textContent;
-//	}
-//
-//	public void setTextContent(String textContent) {
-//		this.textContent = textContent;
-//	}
-
-//	public ArrayList<String> getList() {
-//		ArrayList<String> v = new ArrayList<String>();
-//		v.add(shelfmark);
-//		v.add(identifier);
-//		String[] ss = textContent.split("£");
-//		for (String s: ss) {
-//			v.add(s);
-//		}
-//		return v;
-//	}
-
 	public void appendText(String txt) {
-//		if (textContent==null || textContent.isEmpty()) {
-//			textContent = txt;
-//		} else {
-//			textContent += " " + txt;
-//		}
 		segments.getLast().append(txt);
 	}
 
 	public void appendSegmentation() {
-//		if (textContent == null)
-//			textContent = "";
-//		textContent += "£";
-//		textContent = textContent.replace("£ ", "£");
 		segments.add(new StringBuffer(""));
 	}
 	
 	public String getTextWithPilcrow() {
-//		String s = getTextContent();
-//		String sep = "¶"+Log.lineSep;
-//		String res = s.replace("£", sep);
-//		return res;
 		StringBuffer res = new StringBuffer();
 		String sep = "¶"+Log.lineSep;
 		for (StringBuffer sb: segments) {

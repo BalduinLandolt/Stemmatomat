@@ -7,8 +7,6 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class TextDisplayTableModel extends AbstractTableModel {
 	
-//	private String[] head;
-//	private String[][] data;
 	private int cols = 0;
 	private int rows = 0;
 	private ArrayList<Text> texts;
@@ -22,29 +20,11 @@ public class TextDisplayTableModel extends AbstractTableModel {
 			length = Math.max(length, t.getLength());
 		}
 		
-		//TODO make sure every text is equally long
+		//TODO make sure every text is equally long - still necessary?
 		
 		rows = texts.size();
 		cols = length+2;
 		
-		
-//		head = new String[cols];
-//		data = new String[rows][cols];
-//		
-//		for (int r=0; r<rows; r++) {
-//			Text t = texts.get(r);
-//			ArrayList<String> tmp = t.getList();
-//			for (int j=0; j<tmp.size();j++) {
-//				data[r][j] = tmp.get(j);
-//			}
-//			length = Math.max(length, tmp.size());
-//		}
-//		
-//		head[0] = "Shelf Mark";
-//		head[1] = "ID";
-//		for (int i = 2; i<length; i++) {
-//			head[i] = "#"+(i-1);
-//		}
 	}
 
 	@Override
@@ -70,7 +50,6 @@ public class TextDisplayTableModel extends AbstractTableModel {
 
 	@Override
 	public Object getValueAt(int r, int c) {
-		//return data[r][c];
 		Text t = texts.get(r);
 		if (c == 0) {
 			return t.getShelfmark();
