@@ -175,25 +175,57 @@ public class XMLSelectionView extends JPanel {
 		Text t = new Text(parent.getID(), parent.getShelfmark());
 		
 		Iterator<Content> i = doc_tmp.getDescendants();
+		LinkedList<Content> list = new LinkedList<>();
 		while (i.hasNext()) {
 			Content c = (Content) i.next();
+			list.add(c);
+		}
+		Log.log("got a list.");
+		for (Content c: list) {
 			if (c instanceof Element) {
 				Element e = (Element) c;
-				
-				String txtContent = e.getTextNormalize();
 				String name = e.getName();
-				
-				if (isToBeIncluded(name)) {
-					if (!txtContent.isEmpty())
-						t.appendText(txtContent);
-				}
+
 				if (isSemgmentator(name)) {
-					t.appendSegmentation();
+					e.addContent("____segm___");
 				}
 			}
 		}
+		i = doc_tmp.getDescendants();
+		list = new LinkedList<>();
+		while (i.hasNext()) {
+			Content c = (Content) i.next();
+			list.add(c);
+		}
+		StringBuffer sb = new StringBuffer();
+		for (Content c: list) {
+			if (c instanceof org.jdom2.Text) {
+				org.jdom2.Text tt = (org.jdom2.Text) c;
+				String txtContent = tt.getTextNormalize();
+				
+
+				if (isToBeIncluded(c.getParentElement().getName())) {
+					if (!txtContent.isEmpty()) {
+						sb.append(txtContent);
+					}
+				}
+			}
+		}
+		t.appendSegmentation();
+		Log.log("made a text:");
+		Log.log(sb);
+		
+		String s_s = sb.toString();
+		String[] ss = s_s.split("____segm___");
+		
+		for (String s: ss) {
+			t.appendText(s);
+			t.appendSegmentation();
+		}
+		
 		text = t;
 	}
+
 
 	private boolean isSemgmentator(String name) {
 		if (list_l2.hasName(name))

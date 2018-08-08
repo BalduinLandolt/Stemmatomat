@@ -128,6 +128,8 @@ public class StemmatomatMain {
 	
 	//TODO todos:
 	
+	//TODO option, gewisse tags durch text zu ersetzen
+	
 	//TODO data stage architecture (including menu, keybinding)
 	//TODO nexus export
 	//TODO doing alignment on right click
