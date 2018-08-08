@@ -89,7 +89,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	}
 
 
-
+// TODO prevalidate stemmatic values (e.g. setting all values of the first text to 0)
 
 	private void setUpMenu() {
 		menuBar = new JMenuBar();
@@ -176,7 +176,11 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 	private boolean isValidSave(Document d) {
-		// TODO validate file
+		Element e = d.getRootElement();
+		if (!e.getName().equals("StremmatomatProject"))
+			return false;
+		
+		// TODO more validation? something in meta data?
 		return true;
 	}
 
@@ -520,6 +524,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		private void setMeToStemVal(int val) {
 			clickedText.setStemVal(clickedSegmentIndex, val);
 			Log.log("Changed Stemmatic Value: (Text: "+clickedText.getIdentifier()+", '"+clickedSegmentText+"') to "+val);
+			refreshUI();
 		}
 
 		private int getHighestVal() {
