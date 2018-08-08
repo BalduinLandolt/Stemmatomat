@@ -309,6 +309,8 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		Log.log("Displaying Texts.");
 		
 		textTable = new JTable(model);
+		textTable.setFont(Settings.getStandardFont());
+		textTable.setRowHeight(25);
 		textTable.addMouseListener(new PopUpListener());
 		textTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		JScrollPane sp = new JScrollPane(textTable);

@@ -3,8 +3,11 @@
  */
 package ch.unibas.landolt.balduin.stemmatomat.src.util;
 
+import java.awt.Font;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
+
+import javax.swing.JLabel;
 
 /**
  * @author Balduin Landolt
@@ -69,5 +72,13 @@ public class Settings {
 	public static void setOpenLogOnClose(boolean selected) {
 		openLogOnClose = selected;
 		Log.log("Set openLogOnClose to '"+openLogOnClose+"'.");
+	}
+
+	public static Font getStandardFont() {
+		JLabel l = new JLabel();
+		Font f = l.getFont();
+		f = f.deriveFont(14f);
+		// TODO should be selectable by user
+		return f;
 	}
 }
