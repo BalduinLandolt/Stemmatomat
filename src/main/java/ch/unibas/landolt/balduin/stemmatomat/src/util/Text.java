@@ -5,6 +5,8 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Vector;
 
+import org.jdom2.Attribute;
+import org.jdom2.DataConversionException;
 import org.jdom2.Element;
 
 public class Text {
@@ -12,13 +14,14 @@ public class Text {
 	private String identifier;
 	private String shelfmark;
 	
-	private LinkedList<StringBuffer> segments;
+	
+	private LinkedList<TextSegment> segments;
 
 	public Text(String id, String sm) {
 		identifier=id;
 		shelfmark=sm;
 		segments = new LinkedList<>();
-		segments.add(new StringBuffer(""));
+		segments.add(new TextSegment());
 	}
 
 	public String getIdentifier() {
@@ -42,13 +45,13 @@ public class Text {
 	}
 
 	public void appendSegmentation() {
-		segments.add(new StringBuffer(""));
+		segments.add(new TextSegment());
 	}
 	
 	public String getTextWithPilcrow() {
 		StringBuffer res = new StringBuffer();
 		String sep = "¶"+Log.lineSep;
-		for (StringBuffer sb: segments) {
+		for (TextSegment sb: segments) {
 			res.append(sb.toString());
 			res.append(sep);
 		}
@@ -70,10 +73,10 @@ public class Text {
 		e.setAttribute("shelfmark", shelfmark);
 		e.setAttribute("id", identifier);
 		
-		for (StringBuffer sb: segments) {
+		for (TextSegment sb: segments) {
 			Element c = new Element("segment");
 			c.addContent(sb.toString());
-			//TODO add data from user analysis
+			c.setAttribute("val", Integer.toString(sb.getStemVal()));
 			e.addContent(c);
 		}
 		
@@ -82,7 +85,7 @@ public class Text {
 
 	public void trimToSize(int textLength) {
 		while (getLength()>textLength) {
-			StringBuffer sb = segments.removeLast();
+			TextSegment sb = segments.removeLast();
 			segments.getLast().append(sb.toString());//TODO shold I really add it?
 		}
 	}
@@ -95,11 +98,25 @@ public class Text {
 		
 		LinkedList<Element> segments = new LinkedList<>(c.getChildren("segment"));
 		for (Element seg: segments) {
-			t.appendText(seg.getTextNormalize());
-			t.appendSegmentation();
+			TextSegment seg_new = new TextSegment(seg.getTextNormalize());
+			Attribute v = seg.getAttribute("val");
+			int val = -1;
+			try {
+				if (v != null)
+					val = v.getIntValue();
+			} catch (DataConversionException e) {
+				Log.log("some problem converting attributes");
+			} finally {
+				seg_new.setVal(val);
+				t.addSegment(seg_new);
+			}
 		}
 		
 		return t;
+	}
+
+	private void addSegment(TextSegment seg_new) {
+		segments.add(seg_new);
 	}
 
 	public void trimEmptyEnds() {
@@ -115,13 +132,11 @@ public class Text {
 	}
 
 	public int getStemmaticValue(int c) {
-		// TODO Auto-generated method stub
-		return -1;
+		return segments.get(c).getStemVal();
 	}
 
 	public void setStemVal(int clickedSegmentIndex, int val) {
-		// TODO Auto-generated method stub
-		
+		segments.get(clickedSegmentIndex).setVal(val);
 	}
 	
 

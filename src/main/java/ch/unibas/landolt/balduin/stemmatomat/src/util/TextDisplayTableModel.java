@@ -51,12 +51,13 @@ public class TextDisplayTableModel extends AbstractTableModel {
 	@Override
 	public Object getValueAt(int r, int c) {
 		Text t = texts.get(r);
-		if (c == 0) {
+		c -= 2;
+		if (c == -2) {
 			return t.getShelfmark();
-		} else if (c == 1) {
+		} else if (c == -1) {
 			return t.getIdentifier();
 		} else {
-			String s = "<html>"+t.getSegmentAt(c-2);
+			String s = "<html>"+t.getSegmentAt(c);
 			s += " <font color=\"red\">[";
 			s += t.getStemmaticValue(c);
 			s += "]</font></html>";
