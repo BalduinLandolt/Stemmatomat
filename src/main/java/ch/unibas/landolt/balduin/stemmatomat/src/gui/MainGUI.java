@@ -18,6 +18,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.BorderFactory;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -319,7 +320,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		
 		textTable = new JTable(model);
 		textTable.setDefaultRenderer(String.class, renderer);
-		textTable.setFont(Settings.getStandardFont());//TODO 
+		textTable.setFont(Settings.getStandardFont());
 		setColRenderers(textTable, renderer);
 		textTable.setRowHeight(25);
 		textTable.addMouseListener(new PopUpListener());
@@ -361,8 +362,8 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		    	preferredWidth+=30;
 		    
 		    col.setMaxWidth(preferredWidth+100);
-		    col.setPreferredWidth(preferredWidth+30);
-		    col.setWidth(preferredWidth+30);
+		    col.setPreferredWidth(preferredWidth+10);
+		    col.setWidth(preferredWidth+10);
 		    Log.log("Col: "+i+" Width: "+col.getWidth()+" PrefWidth: "+preferredWidth);
 		    revalidate();
 		    repaint();
@@ -499,7 +500,10 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	        Log.log("Click: Text '"+clickedText.getIdentifier()+"' Segment #"+clickedSegmentIndex+" "+clickedSegmentText);
 		}
 
-		public void setUpAsLeftClick() {		
+		public void setUpAsLeftClick() {
+			if (clickedSegmentIndex < 0) {//TODO should this do anything?
+				return;
+			}
 			addExistingOptions();
 			addSeparator();
 			addNextOption();
@@ -664,18 +668,32 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			JPanel p = new JPanel(new BorderLayout(3,3));
+			p.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 4));
 			
 			if (value instanceof TextSegment) {
 				TextSegment ts = (TextSegment)value;
 				int colInt = (ts.getStemVal() + colors.length) % colors.length;
 				setBackground(colors[colInt]);
-				// TODO change text accordingly
-				//c.setBackground(Color.RED);
+				p.setBackground(colors[colInt]);
+				
+//				String s = "<html>"+ts.toString();
+//				s += " <font color=\"red\">[";
+//				s += ts.getStemVal();
+//				s += "]</font></html>";
+				setValue(ts.toString());
+				JLabel vl = new JLabel(Integer.valueOf(ts.getStemVal()).toString());
+				vl.setForeground(new Color(200, 0, 0));
+				vl.setFont(Settings.getStandardFont());
+				p.add(vl, BorderLayout.EAST);
+				
 				Text t = ts.getContainingText();
-				setToolTipText(t.getIdentifier());
+				p.setToolTipText(t.getIdentifier());
 			}
 			
-			return c;
+			p.add(c, BorderLayout.CENTER);
+			
+			return p;
 		}
 		
 	}

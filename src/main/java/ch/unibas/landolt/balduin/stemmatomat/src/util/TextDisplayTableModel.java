@@ -57,11 +57,6 @@ public class TextDisplayTableModel extends AbstractTableModel {
 		} else if (c == -1) {
 			return t.getIdentifier();
 		} else {
-//			String s = "<html>"+t.getSegmentAt(c);
-//			s += " <font color=\"red\">[";
-//			s += t.getStemmaticValue(c);
-//			s += "]</font></html>";
-//			return s;
 			return t.getSegmentAt(c);
 		}
 	}
