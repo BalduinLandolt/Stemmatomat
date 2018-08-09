@@ -647,16 +647,31 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	}
 	
 	private class TextTableCellRenderer extends DefaultTableCellRenderer {
+		private Color[] colors = {
+				Color.WHITE,
+				Color.LIGHT_GRAY,
+				Color.ORANGE,
+				Color.CYAN,
+				Color.GREEN,
+				Color.yellow,
+				Color.MAGENTA,
+				Color.BLUE,
+				Color.GRAY,
+				Color.RED
+		};
+		
 		public TextTableCellRenderer() {super();}
 
 		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			
 			if (value instanceof TextSegment) {
-				// TODO change color according to stemVal
+				TextSegment ts = (TextSegment)value;
+				int colInt = (ts.getStemVal() + colors.length) % colors.length;
+				setBackground(colors[colInt]);
 				// TODO change text accordingly
 				//c.setBackground(Color.RED);
-				Text t = ((TextSegment)value).getContainingText();
+				Text t = ts.getContainingText();
 				setToolTipText(t.getIdentifier());
 			}
 			
