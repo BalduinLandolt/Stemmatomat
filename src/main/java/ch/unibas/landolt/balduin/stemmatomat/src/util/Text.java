@@ -21,7 +21,7 @@ public class Text {
 		identifier=id;
 		shelfmark=sm;
 		segments = new LinkedList<>();
-		segments.add(new TextSegment());
+		segments.add(new TextSegment(this));
 	}
 
 	public String getIdentifier() {
@@ -45,7 +45,7 @@ public class Text {
 	}
 
 	public void appendSegmentation() {
-		segments.add(new TextSegment());
+		segments.add(new TextSegment(this));
 	}
 	
 	public String getTextWithPilcrow() {
@@ -62,7 +62,7 @@ public class Text {
 		return segments.size();
 	}
 
-	public String getSegmentAt(int c) {
+	public String getSegmentTextAt(int c) {
 		if (c >= getLength() || c<0)
 			return "";
 		return segments.get(c).toString();
@@ -98,7 +98,7 @@ public class Text {
 		
 		LinkedList<Element> segments = new LinkedList<>(c.getChildren("segment"));
 		for (Element seg: segments) {
-			TextSegment seg_new = new TextSegment(seg.getTextNormalize());
+			TextSegment seg_new = new TextSegment(seg.getTextNormalize(), t);
 			Attribute v = seg.getAttribute("val");
 			int val = -1;
 			try {
@@ -137,6 +137,10 @@ public class Text {
 
 	public void setStemVal(int clickedSegmentIndex, int val) {
 		segments.get(clickedSegmentIndex).setVal(val);
+	}
+
+	public TextSegment getSegmentAt(int c) {
+		return segments.get(c);
 	}
 	
 

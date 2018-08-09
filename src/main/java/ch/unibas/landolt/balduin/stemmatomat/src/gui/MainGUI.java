@@ -1,6 +1,7 @@
 package ch.unibas.landolt.balduin.stemmatomat.src.gui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.Desktop;
 import java.awt.Dimension;
@@ -20,6 +21,7 @@ import java.util.HashMap;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -32,6 +34,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 
@@ -47,6 +50,7 @@ import ch.unibas.landolt.balduin.stemmatomat.src.util.Loggable;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Settings;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.Text;
 import ch.unibas.landolt.balduin.stemmatomat.src.util.TextDisplayTableModel;
+import ch.unibas.landolt.balduin.stemmatomat.src.util.TextSegment;
 
 @SuppressWarnings("serial")
 public class MainGUI extends JFrame implements WindowListener, Loggable {
@@ -309,23 +313,35 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		}
 		
 		TextDisplayTableModel model = new TextDisplayTableModel(texts);
+		TextTableCellRenderer renderer = new TextTableCellRenderer();
 		
 		Log.log("Displaying Texts.");
 		
 		textTable = new JTable(model);
-		textTable.setFont(Settings.getStandardFont());
+		textTable.setDefaultRenderer(String.class, renderer);
+		textTable.setFont(Settings.getStandardFont());//TODO 
+		setColRenderers(textTable, renderer);
 		textTable.setRowHeight(25);
 		textTable.addMouseListener(new PopUpListener());
 		textTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
 		JScrollPane sp = new JScrollPane(textTable);
 		sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		workspace.add(sp, BorderLayout.CENTER);
-//		
 		adjustColumnWidth(textTable);
 		
 		refreshUI();
 	}
 	
+
+	private void setColRenderers(JTable t, TextTableCellRenderer r) {
+		TableColumn col = null;
+		for (int i=2; i<t.getColumnCount(); i++) {
+			col = t.getColumnModel().getColumn(i);
+			col.setCellRenderer(r);
+			Log.log();
+		}
+	}
+
 
 	private void adjustColumnWidth(JTable t) {
 		TableColumn col = null;
@@ -478,7 +494,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	        TextDisplayTableModel model = (TextDisplayTableModel) textTable.getModel();
 	        clickedText = model.getTextAtRow(textTable.rowAtPoint(p));
 	        clickedSegmentIndex = textTable.columnAtPoint(p)-2;
-	        clickedSegmentText = clickedText.getSegmentAt(clickedSegmentIndex);
+	        clickedSegmentText = clickedText.getSegmentTextAt(clickedSegmentIndex);
 	        
 	        Log.log("Click: Text '"+clickedText.getIdentifier()+"' Segment #"+clickedSegmentIndex+" "+clickedSegmentText);
 		}
@@ -506,7 +522,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 				if (t == clickedText) {
 					continue;
 				}
-				String s = t.getSegmentAt(clickedSegmentIndex);
+				String s = t.getSegmentTextAt(clickedSegmentIndex);
 				int stemVal = t.getStemmaticValue(clickedSegmentIndex);
 				map.put(Integer.valueOf(stemVal), s);
 			}
@@ -628,6 +644,25 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		
 		revalidate();
 		repaint();
+	}
+	
+	private class TextTableCellRenderer extends DefaultTableCellRenderer {
+		public TextTableCellRenderer() {super();}
+
+		public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+			Component c = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			
+			if (value instanceof TextSegment) {
+				// TODO change color according to stemVal
+				// TODO change text accordingly
+				//c.setBackground(Color.RED);
+				Text t = ((TextSegment)value).getContainingText();
+				setToolTipText(t.getIdentifier());
+			}
+			
+			return c;
+		}
+		
 	}
 
 }

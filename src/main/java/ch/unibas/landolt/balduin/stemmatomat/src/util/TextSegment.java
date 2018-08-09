@@ -3,13 +3,16 @@ package ch.unibas.landolt.balduin.stemmatomat.src.util;
 public class TextSegment {
 	private String text = "";
 	private int val = -1;
+	private Text owner;
 
-	public TextSegment(String t) {
+	public TextSegment(String t, Text p) {
 		text = t;
+		owner = p;
 	}
 
-	public TextSegment() {
+	public TextSegment(Text p) {
 		text = "";
+		owner = p;
 	}
 
 	public void append(String txt) {
@@ -30,6 +33,10 @@ public class TextSegment {
 
 	public int getStemVal() {
 		return val;
+	}
+
+	public Text getContainingText() {
+		return owner;
 	}
 
 }
