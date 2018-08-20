@@ -504,9 +504,18 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 			if (clickedSegmentIndex < 0) {//TODO should this do anything?
 				return;
 			}
+			addQuestionMark();
+			addSeparator();
 			addExistingOptions();
 			addSeparator();
 			addNextOption();
+		}
+
+		private void addQuestionMark() {
+			JMenuItem m = new JMenuItem(" ? ");
+			m.setActionCommand("-1");
+			m.addActionListener(e -> setMeToStemVal(Integer.parseInt(e.getActionCommand())));
+			add(m);
 		}
 
 		private void addNextOption() {
@@ -544,11 +553,12 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		private void setMeToStemVal(int val) {
 			clickedText.setStemVal(clickedSegmentIndex, val);
 			Log.log("Changed Stemmatic Value: (Text: "+clickedText.getIdentifier()+", '"+clickedSegmentText+"') to "+val);
+			parent.autoEvaluateStemValues();
 			refreshUI();
 		}
 
 		private int getHighestVal() {
-			int max = 0;
+			int max = -2;
 			for (Text t: parent.getTexts()) {
 				int stemVal = t.getStemmaticValue(clickedSegmentIndex);
 				max = Math.max(max, stemVal);
@@ -660,8 +670,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 				Color.yellow,
 				Color.MAGENTA,
 				Color.BLUE,
-				Color.GRAY,
-				Color.RED
+				Color.GRAY
 		};
 		
 		public TextTableCellRenderer() {super();}
@@ -673,16 +682,24 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 			
 			if (value instanceof TextSegment) {
 				TextSegment ts = (TextSegment)value;
-				int colInt = (ts.getStemVal() + colors.length) % colors.length;
-				setBackground(colors[colInt]);
-				p.setBackground(colors[colInt]);
+				JLabel vl = null;
+				
+				if (ts.getStemVal() >=0) {
+					int colInt = (ts.getStemVal() + colors.length) % colors.length;
+					setBackground(colors[colInt]);
+					p.setBackground(colors[colInt]);
+					vl = new JLabel(Integer.valueOf(ts.getStemVal()).toString());
+				} else {
+					vl = new JLabel("?");
+					setBackground(Color.RED);
+					p.setBackground(Color.RED);
+				}
 				
 //				String s = "<html>"+ts.toString();
 //				s += " <font color=\"red\">[";
 //				s += ts.getStemVal();
 //				s += "]</font></html>";
 				setValue(ts.toString());
-				JLabel vl = new JLabel(Integer.valueOf(ts.getStemVal()).toString());
 				vl.setForeground(new Color(200, 0, 0));
 				vl.setFont(Settings.getStandardFont());
 				p.add(vl, BorderLayout.EAST);
