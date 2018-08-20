@@ -328,7 +328,6 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 		JScrollPane sp = new JScrollPane(textTable);
 		sp.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 		workspace.add(sp, BorderLayout.CENTER);
-		adjustColumnWidth(textTable);
 		
 		refreshUI();
 	}
@@ -345,6 +344,10 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 	private void adjustColumnWidth(JTable t) {
+		if (t==null)
+			return;
+		
+		
 		TableColumn col = null;
 		for (int i=0; i<t.getColumnCount(); i++) {
 			col = t.getColumnModel().getColumn(i);
@@ -372,6 +375,17 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	}
 
 
+
+
+	private void adjustTableSize() {
+		int textLength = parent.getTexts().get(0).getLength();
+		int prefLength = textLength + 2;
+		int colCount = textTable.getColumnCount();
+		
+		if (colCount>prefLength) {
+			textTable.removeColumn(textTable.getColumnModel().getColumn(colCount-1));
+		}
+	}
 
 
 	public void windowClosing(WindowEvent arg0) {
@@ -581,8 +595,7 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 			i.addActionListener(e -> deleteSegmentContents(clickedText, clickedSegmentIndex));
 			add(i);
 			
-			i = new JMenuItem("Remove Segment (to the right are moved to the left)");
-			i.setEnabled(false);
+			i = new JMenuItem("Remove Segment (segments to the right are moved to the left)");
 			i.addActionListener(e -> removeSegmentFromText(clickedText, clickedSegmentIndex));
 			add(i);
 			
@@ -641,7 +654,11 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 	public void removeSegmentFromText(Text text, int segmentIndex) {
-		// TODO Auto-generated method stub
+		text.removeSegmentAt(segmentIndex);
+		text.removeValsRightOfIndex(segmentIndex);
+		parent.normalizeTextLength();
+		parent.autoEvaluateStemValues();
+		refreshUI();
 	}
 
 
@@ -663,6 +680,9 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 	public void refreshUI() {
+		adjustTableSize();
+		adjustColumnWidth(textTable);
+		
 		mi_saveProject.setEnabled(parent.hasData());
 		mi_saveAsProject.setEnabled(parent.hasData());
 

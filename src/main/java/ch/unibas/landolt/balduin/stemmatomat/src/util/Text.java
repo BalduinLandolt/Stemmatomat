@@ -142,6 +142,17 @@ public class Text {
 	public TextSegment getSegmentAt(int c) {
 		return segments.get(c);
 	}
+
+	public void removeSegmentAt(int i) {
+		segments.remove(i);
+	}
+
+	public void removeValsRightOfIndex(int segmentIndex) {
+		for (int i=segmentIndex; i<segments.size(); i++) {
+			TextSegment ts = segments.get(i);
+			ts.setVal(-1);
+		}
+	}
 	
 
 }

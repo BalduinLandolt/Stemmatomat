@@ -81,7 +81,7 @@ public class StemmatomatMain {
 		mainGUI.displayTexts(texts);
 	}
 
-	private void normalizeTextLength() {
+	public void normalizeTextLength() {
 		int longest = 0;
 		for (Text t: texts) {
 			t.trimEmptyEnds();
