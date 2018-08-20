@@ -198,5 +198,6 @@ public class StemmatomatMain {
 	//TODO data stage architecture (including menu, keybinding)
 	//TODO nexus export
 	//TODO doing alignment on right click
+	//TODO preview als tabelle gestalten, andere texte einbeziehen
 	
 }

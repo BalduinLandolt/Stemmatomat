@@ -585,7 +585,6 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 			JMenuItem i = null;
 
 			i = new JMenuItem("Edit Text");
-			i.setEnabled(false);
 			i.addActionListener(e -> editText(clickedText));
 			add(i);
 			
@@ -673,7 +672,9 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 
 
 	private void editText(Text text) {
-		// TODO Auto-generated method stub
+		Log.log("Launching Text Edit dialog.");
+		TextEditDialog dia = new TextEditDialog(this);
+		dia.run(text);
 	}
 
 
