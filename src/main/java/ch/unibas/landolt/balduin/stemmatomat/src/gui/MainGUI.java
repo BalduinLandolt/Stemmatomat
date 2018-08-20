@@ -577,7 +577,11 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 			
 			addSeparator();
 			
-			i = new JMenuItem("Delete Segment");
+			i = new JMenuItem("Delete Segment Content");
+			i.addActionListener(e -> deleteSegmentContents(clickedText, clickedSegmentIndex));
+			add(i);
+			
+			i = new JMenuItem("Remove Segment (to the right are moved to the left)");
 			i.setEnabled(false);
 			i.addActionListener(e -> removeSegmentFromText(clickedText, clickedSegmentIndex));
 			add(i);
@@ -641,6 +645,14 @@ public class MainGUI extends JFrame implements WindowListener, Loggable {
 	}
 
 
+
+	private void deleteSegmentContents(Text text, int segmentIndex) {
+		TextSegment ts = text.getSegmentAt(segmentIndex);
+		ts.setText("");
+		ts.setVal(-1);
+		parent.autoEvaluateStemValues();
+		refreshUI();
+	}
 
 
 	private void editText(Text text) {

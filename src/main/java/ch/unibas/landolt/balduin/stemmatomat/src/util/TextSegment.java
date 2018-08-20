@@ -39,4 +39,8 @@ public class TextSegment {
 		return owner;
 	}
 
+	public void setText(String s) {
+		text = s;
+	}
+
 }
